@@ -62,7 +62,10 @@ word_ids = []
 
 tag_ids = []
 char_ids = []
+counter = 0
 for sentence in words:
+    print("{}/{}".format(str(counter), len(words)), end="\r")
+    counter += 1
     current_sentence_word_id = []
     current_sentence_char_id = []
     for word in sentence:
@@ -82,7 +85,10 @@ for sentence in words:
     word_ids.append(current_sentence_word_id)
     char_ids.append(current_sentence_char_id)
 
+counter = 0
 for sentence in tags:
+    print("{}/{}".format(str(counter), len(tags)), end="\r")
+    counter += 1
     current_sentence_tag_id = []
     for tag in sentence:
         current_sentence_tag_id.append(vocab_tag2id[tag])
