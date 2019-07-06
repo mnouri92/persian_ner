@@ -40,10 +40,8 @@ with open(test_conll_data_file_path, 'r') as f:
 
 lines = text.split('\n')
 words = []
-tags = []
 other_info = []
 current_sentence_word = []
-current_sentence_tag = []
 current_sentence_other_info = []
 counter = 0
 for line in lines:
@@ -54,18 +52,14 @@ for line in lines:
     if len(line.strip()) == 0:
         if len(current_sentence_word)>0:
             words.append(current_sentence_word)
-            tags.append(current_sentence_tag)
             other_info.append(current_sentence_other_info)
         current_sentence_word = []
         current_sentence_other_info = []
     else:
         current_sentence_word.append(normalizer.normalize(line.split()[0].strip()))
-        current_sentence_tag.append(line.split()[1].strip())
         current_sentence_other_info += line.split()[2:]
 
 word_ids = []
-
-tag_ids = []
 char_ids = []
 counter = 0
 for sentence in words:
@@ -76,43 +70,26 @@ for sentence in words:
     current_sentence_char_id = []
     for word in sentence:
         current_id, twe = update_word_vocab(word, vocab_id2word, vocab_word2id, twe, word_embedding, avg_vector)
-        # current_id = update_vocab(word, vocab_id2word, vocab_word2id)
         current_sentence_word_id.append(current_id)
 
         current_word_chars = [vocab_char2id[x] for x in word if x in vocab_char2id.keys()]
         current_word_chars += [0] * (cfg.max_char - len(current_word_chars))
 
         current_sentence_char_id.append(current_word_chars)
-        # if(word in word_embedding.keys()):
-        #     twe[current_id] = np.asarray(word_embedding[word])
-        # else:
-        #     twe = np.append(twe, avg_vector, axis = 0)
 
     word_ids.append(current_sentence_word_id)
     char_ids.append(current_sentence_char_id)
 
-counter = 0
-for sentence in tags:
-    if counter % 1000 == 0:
-        print("{}/{}".format(str(counter), len(tags)))
-    counter += 1
-    counter += 1
-    current_sentence_tag_id = []
-    for tag in sentence:
-        current_sentence_tag_id.append(vocab_tag2id[tag])
 
-    tag_ids.append(current_sentence_tag_id)
+convert_conll_to_numpy_array(test_conll_data_file_path, vocab_word2id, vocab_tag2id, vocab_char2id,
+                             test_conll_data_file_path + ".seq", cfg.max_char)
 
-word_ids = np.array(word_ids)
-char_ids = np.array(char_ids)
-tag_ids = np.array(tag_ids)
+[test_words, test_tags, test_chars] = load_sequence_data(test_conll_data_file_path + ".seq")
 
-print(np.shape(word_ids))
-print(np.shape(tag_ids))
-print(np.shape(char_ids))
+cfg.max_char = np.shape(test_chars[0])[1]
 
 mod = MTL2CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, cfg)
 mod.build_graph()
 mod.restore_graph()
-mod.evaluate_model(test_word_seq=word_ids, test_tag_seq=tag_ids, test_char_seq= char_ids, word_embedding=twe
+mod.evaluate_model(test_word_seq=test_words, test_tag_seq=test_tags, test_char_seq= test_chars, word_embedding=twe
                    , id2word=vocab_id2word, id2tag=vocab_id2tag, result_file_path='results', task_number=1)
