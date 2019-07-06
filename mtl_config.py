@@ -35,7 +35,7 @@ class MTLConfig():
         self.lstm_model_hidden_size          = 300
         self.lstm_model_rnn_dropout          = 0.5
         self.lstm_model_rnn_lr               = 0.001
-        self.lstm_model_max_epoch            = 30
+        self.lstm_model_max_epoch            = 40
         self.lstm_model_hidden_size_char     = 100
 
 
