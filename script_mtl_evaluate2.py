@@ -107,6 +107,10 @@ word_ids = np.array(word_ids)
 char_ids = np.array(char_ids)
 tag_ids = np.array(tag_ids)
 
+print(np.shape(word_ids))
+print(np.shape(tag_ids))
+print(np.shape(char_ids))
+
 mod = MTL2CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, cfg)
 mod.build_graph()
 mod.restore_graph()
