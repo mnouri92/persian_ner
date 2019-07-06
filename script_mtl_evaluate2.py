@@ -70,7 +70,7 @@ for sentence in words:
         # current_id = update_vocab(word, vocab_id2word, vocab_word2id)
         current_sentence_word_id.append(current_id)
 
-        current_word_chars = [vocab_char2id[x] for x in word]
+        current_word_chars = [vocab_char2id[x] for x in word if x in vocab_char2id.keys()]
         current_word_chars += [0] * (cfg.max_char - len(current_word_chars))
 
         current_sentence_char_id.append(current_word_chars)
