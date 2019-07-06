@@ -45,7 +45,10 @@ other_info = []
 current_sentence_word = []
 current_sentence_tag = []
 current_sentence_other_info = []
+counter = 0
 for line in lines:
+    print("{}/{}".format(str(counter), len(lines)), end="\r")
+    counter += 1
     if len(line.strip()) == 0:
         if len(current_sentence_word)>0:
             words.append(current_sentence_word)
