@@ -59,6 +59,7 @@ for line in lines:
         current_sentence_other_info += line.split()[2:]
 
 word_ids = []
+
 tag_ids = []
 char_ids = []
 for sentence in words:
