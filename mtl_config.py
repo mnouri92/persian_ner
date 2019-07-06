@@ -3,8 +3,8 @@ class MTLConfig():
     def __init__(self, base_directory_path):
 
         self.base_directory_path = base_directory_path
-        self.base_directory_data = self.base_directory_path + "/data/"
-        self.base_directory_model = self.base_directory_path + "/model/"
+        self.base_directory_data = self.base_directory_path + "data/"
+        self.base_directory_model = self.base_directory_path + "model/"
 
         #NER_Bijankhan:
         self.file_conll_task1_directory = self.base_directory_data + "ner_bijankhan/"
