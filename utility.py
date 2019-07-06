@@ -168,7 +168,7 @@ def load_trimmed_word_embeddings(trimmed_file_name):
         logger.info("data is loaded. vocab size: {}  dim: {}".format(w,d))
         return we
 
-def convert_conll_to_numpy_array(file_name, vocab_word, vocab_tag, vocab_char, output_file, max_char, OOV_word="OOV"):
+def convert_conll_to_numpy_array(file_name, vocab_word, vocab_tag, vocab_char, output_file, max_char, OOV_index=-1):
     logger.info("start to convert the conll file to word/tag sequence: {}".format(file_name))
 
     all_sentences_word = []
@@ -196,7 +196,7 @@ def convert_conll_to_numpy_array(file_name, vocab_word, vocab_tag, vocab_char, o
                 if word in vocab_word.keys():
                     current_sentence_word.append(vocab_word[word])
                 else:
-                    current_sentence_word.append(OOV_word)
+                    current_sentence_word.append(OOV_index)
                 current_sentence_tag.append(vocab_tag[tag])
                 current_word_chars = [vocab_char[x] for x in word]
                 current_word_chars += [0]*(max_char-len(current_word_chars))
