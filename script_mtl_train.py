@@ -31,7 +31,6 @@ convert_conll_to_numpy_array(cfg.file_conll_task1_validation_data, vocab_word2id
 convert_conll_to_numpy_array(cfg.file_conll_task2_train_data, vocab_word2id, vocab_tag2id, vocab_char2id,
                              cfg.file_seq_task2_train_data, cfg.max_char)
 
-
 [vocab_size, dim] = np.shape(twe)
 tag_size = max(vocab_id2tag, key=int) + 1
 char_size = max(vocab_id2char, key=int) + 1
