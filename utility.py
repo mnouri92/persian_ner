@@ -193,7 +193,7 @@ def convert_conll_to_numpy_array(file_name, vocab_word, vocab_tag, vocab_char, o
                 assert len(splitted_line) == 2
                 word = splitted_line[0]
                 tag = splitted_line[1]
-                if word in vocab_word.keyset():
+                if word in vocab_word.keys():
                     current_sentence_word.append(vocab_word[word])
                 else:
                     current_sentence_word.append(OOV_word)
@@ -204,7 +204,6 @@ def convert_conll_to_numpy_array(file_name, vocab_word, vocab_tag, vocab_char, o
 
     np.savez_compressed(output_file, words=all_sentences_word, tags=all_sentences_tag, chars = all_sentences_char)
     logger.info("sequences are stored successfully: {}".format(output_file))
-
     return
 
 def load_sequence_data(sequence_data_file_name):

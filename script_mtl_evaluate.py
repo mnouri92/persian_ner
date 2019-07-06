@@ -1,54 +1,12 @@
-from model.mtl2_model import MTL2Model
-from model.mtl3_model import MTL3Model
-from model.mtl4_model import MTL4Model
-from model.mtl2_gan_model import MTL2GANModel
 from model.mtl2_char_cnn_word_bilstm_model import MTL2CharCNNWordBilstmModel
-from model.mtl3_char_cnn_word_bilstm_model import MTL3CharCNNWordBilstmModel
-from model.mtl4_char_cnn_word_bilstm_model import MTL4CharCNNWordBilstmModel
 
-from common.mtl_config import MTLConfig
-from common.utility import *
+from mtl_config import MTLConfig
+from utility import *
 import time
 
-numtask = sys.argv[1]
+test_conll_data_file_path = sys.argv[1]
 
-if numtask == "mtl2":
-    task1 = sys.argv[2]
-    task2 = sys.argv[3]
-    task3 = ""
-    task4 = ""
-elif numtask == "mtl3":
-    task1 = sys.argv[2]
-    task2 = sys.argv[3]
-    task3 = sys.argv[4]
-    task4 = ""
-elif numtask == "mtl4":
-    task1 = sys.argv[2]
-    task2 = sys.argv[3]
-    task3 = sys.argv[4]
-    task4 = sys.argv[5]
-elif numtask == "mtl2charcnnwordbilstm":
-    task1 = sys.argv[2]
-    task2 = sys.argv[3]
-    task3 = ""
-    task4 = ""
-elif numtask == "mtl3charcnnwordbilstm":
-    task1 = sys.argv[2]
-    task2 = sys.argv[3]
-    task3 = sys.argv[4]
-    task4 = ""
-elif numtask == "mtl4charcnnwordbilstm":
-    task1 = sys.argv[2]
-    task2 = sys.argv[3]
-    task3 = sys.argv[4]
-    task4 = sys.argv[5]
-
-cfg = MTLConfig(directory_data_param="/home/itrc/hadi/workspace/persian_ner/files/mtl/data/"
-                             , file_conll_task1_directory_param="/home/itrc/hadi/workspace/persian_ner/files/mtl/data/" + task1 + "/"
-                             , file_conll_task2_directory_param="/home/itrc/hadi/workspace/persian_ner/files/mtl/data/" + task2 + "/"
-                             , file_conll_task3_directory_param="/home/itrc/hadi/workspace/persian_ner/files/mtl/data/" + task3 + "/"
-                             , file_conll_task4_directory_param="/home/itrc/hadi/workspace/persian_ner/files/mtl/data/" + task4 + "/"
-                             , task_param=numtask)
+cfg = MTLConfig("files/")
 
 [vocab_id2tag, vocab_tag2id] = load_vocab(cfg.file_tag_vocab)
 [vocab_id2word, vocab_word2id] = load_vocab(cfg.file_word_vocab)
