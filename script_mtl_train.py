@@ -7,7 +7,8 @@ logger = setup_custom_logger(__name__)
 cfg = MTLConfig("files/")
 
 logger.info("bulding vocabulray")
-[word_vocab, tag_vocab, char_vocab, max_char] = build_vocab([cfg.file_conll_task1_train_data, cfg.file_conll_task1_validation_data])
+[word_vocab, tag_vocab, char_vocab, max_char] = build_vocab([
+    cfg.file_conll_task1_train_data, cfg.file_conll_task1_validation_data, cfg.file_conll_task2_train_data])
 
 logger.info("dumping created vocabulray")
 dump_vocab(word_vocab, cfg.file_word_vocab)
