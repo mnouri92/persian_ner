@@ -40,4 +40,4 @@ class MTLConfig():
 
 
         #Model
-        self.max_char                        = 50
+        self.max_char                        = 65

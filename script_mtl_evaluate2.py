@@ -8,7 +8,7 @@ from utility import *
 import os.path
 import pickle
 
-test_conll_data_file_path = sys.argv[1]
+test_conll_data_file_path = "/home/hadi/PycharmProjects/persian_ner_github/files/data/test.data"
 
 cfg = MTLConfig("files/")
 
@@ -86,9 +86,11 @@ convert_conll_to_numpy_array(test_conll_data_file_path, vocab_word2id, vocab_tag
 
 [test_words, test_tags, test_chars] = load_sequence_data(test_conll_data_file_path + ".seq")
 
-cfg.max_char = np.shape(test_chars[0])[1]
+print(np.shape(test_words))
+print(np.shape(test_tags))
+print(np.shape(test_chars))
 
-mod = MTL2CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, cfg)
+mod = MTL2CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, cfg, cfg.max_char)
 mod.build_graph()
 mod.restore_graph()
 mod.evaluate_model(test_word_seq=test_words, test_tag_seq=test_tags, test_char_seq= test_chars, word_embedding=twe
