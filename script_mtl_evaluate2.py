@@ -47,7 +47,8 @@ current_sentence_tag = []
 current_sentence_other_info = []
 counter = 0
 for line in lines:
-    print("{}/{}".format(str(counter), len(lines)), end="\r")
+    if counter % 1000 == 0:
+        print("{}/{}".format(str(counter), len(lines)))
     counter += 1
 
     if len(line.strip()) == 0:
@@ -68,7 +69,8 @@ tag_ids = []
 char_ids = []
 counter = 0
 for sentence in words:
-    print("{}/{}".format(str(counter), len(words)), end="\r")
+    if counter % 1000 == 0:
+        print("{}/{}".format(str(counter), len(words)))
     counter += 1
     current_sentence_word_id = []
     current_sentence_char_id = []
@@ -91,7 +93,9 @@ for sentence in words:
 
 counter = 0
 for sentence in tags:
-    print("{}/{}".format(str(counter), len(tags)), end="\r")
+    if counter % 1000 == 0:
+        print("{}/{}".format(str(counter), len(tags)))
+    counter += 1
     counter += 1
     current_sentence_tag_id = []
     for tag in sentence:
