@@ -8,7 +8,7 @@ from utility import *
 import os.path
 import pickle
 
-test_conll_data_file_path = "/home/hadi/PycharmProjects/persian_ner_github/files/data/test.data"
+test_conll_data_file_path = sys.argv[1]
 
 cfg = MTLConfig("files/")
 
