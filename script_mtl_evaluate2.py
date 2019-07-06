@@ -30,7 +30,7 @@ twe = load_trimmed_word_embeddings(cfg.file_trimmed_word_embedding)
 tag_size = max(vocab_id2tag, key=int) + 1
 char_size = max(vocab_id2char, key=int) + 1
 
-n = CharNormalizer()
+normalizer = CharNormalizer()
 
 output_file = test_conll_data_file_path + '.out'
 
@@ -54,7 +54,7 @@ for line in lines:
         current_sentence_word = []
         current_sentence_other_info = []
     else:
-        current_sentence_word.append(line.split()[0].strip())
+        current_sentence_word.append(normalizer.normalize(line.split()[0].strip()))
         current_sentence_tag.append(line.split()[1].strip())
         current_sentence_other_info += line.split()[2:]
 
