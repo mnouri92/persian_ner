@@ -257,6 +257,19 @@ class MTL2CharCNNWordBilstmModel():
 
     def evaluate_model(self, test_word_seq, test_tag_seq, test_char_seq, word_embedding, task_number=1, id2word={}, id2tag={},
                        result_file_path=''):
+        print(np.shape(test_word_seq))
+        print(np.shape(test_word_seq))
+        print(np.shape(test_word_seq))
+        print(np.shape(test_word_seq))
+        print(np.shape(test_word_seq))
+        print(np.shape(test_word_seq))
+        print(np.shape(test_word_seq))
+        print(np.shape(test_word_seq))
+        print(np.shape(test_word_seq))
+        print(np.shape(test_word_seq))
+        print(np.shape(test_word_seq))
+        print(np.shape(test_word_seq))
+        print(np.shape(test_word_seq))
 
         try:
             os.remove(result_file_path)
