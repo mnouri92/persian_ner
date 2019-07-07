@@ -9,6 +9,7 @@ import os.path
 import pickle
 
 test_conll_data_file_path = sys.argv[1]
+result_file_path = sys.argv[2]
 
 cfg = MTLConfig("files/")
 
@@ -94,4 +95,4 @@ mod = MTL2CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, cfg, cfg.m
 mod.build_graph()
 mod.restore_graph()
 mod.evaluate_model(test_word_seq=test_words, test_tag_seq=test_tags, test_char_seq= test_chars, word_embedding=twe
-                   , id2word=vocab_id2word, id2tag=vocab_id2tag, result_file_path='results', task_number=1)
+                   , id2word=vocab_id2word, id2tag=vocab_id2tag, result_file_path=result_file_path, task_number=1)
