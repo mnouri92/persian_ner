@@ -87,10 +87,6 @@ convert_conll_to_numpy_array(test_conll_data_file_path, vocab_word2id, vocab_tag
 
 [test_words, test_tags, test_chars] = load_sequence_data(test_conll_data_file_path + ".seq")
 
-print(np.shape(test_words))
-print(np.shape(test_tags))
-print(np.shape(test_chars))
-
 mod = MTL2CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, cfg, cfg.max_char)
 mod.build_graph()
 mod.restore_graph()
