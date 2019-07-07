@@ -206,6 +206,7 @@ def convert_conll_to_numpy_array(file_name, vocab_word, vocab_tag, vocab_char, o
             all_sentences_tag.append(current_sentence_tag)
             all_sentences_char.append(current_sentence_char)
 
+
     np.savez_compressed(output_file, words=all_sentences_word, tags=all_sentences_tag, chars = all_sentences_char)
     logger.info("sequences are stored successfully: {}".format(output_file))
     return
