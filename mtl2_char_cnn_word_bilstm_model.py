@@ -254,6 +254,7 @@ class MTL2CharCNNWordBilstmModel():
 
     def restore_graph(self):
         self.saver.restore(self.sess, tf.train.latest_checkpoint(self.cfg.dir_checkpoints))
+        return tf.train.latest_checkpoint(self.cfg.dir_checkpoints)
 
     def evaluate_model(self, test_word_seq, test_tag_seq, test_char_seq, word_embedding, task_number=1, id2word={}, id2tag={},
                        result_file_path=''):
