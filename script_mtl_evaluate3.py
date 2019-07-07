@@ -41,6 +41,7 @@ mod.restore_graph()
 
 onlyfiles = [f for f in listdir(test_conll_data_directory_input) if isfile(join(test_conll_data_directory_input, f))]
 for filename in onlyfiles:
+    print("===================={}=====================".format(filename))
     filename_without_extension = os.path.splitext("file.txt")[0]
     output_file = join(test_conll_data_directory_output, filename_without_extension +".predict")
     input_file = join(test_conll_data_directory_input, filename)
