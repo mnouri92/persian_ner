@@ -275,7 +275,7 @@ class MTL2CharCNNWordBilstmModel():
         while end_index < total_num_sentences:
             start_index = batch_number * self.cfg.lstm_model_batch_size
             batch_number += 1
-            end_index = min([total_num_sentences, start_index + self.cfg.lstm_model_batch_size]) + 1
+            end_index = min([total_num_sentences, start_index + self.cfg.lstm_model_batch_size])+1
 
             feed_dict, current_batch_test_sen_len, current_batch_test_word_seq, current_batch_test_tag_seq = \
                 self.create_feed_dict(test_word_seq, test_tag_seq, test_char_seq, word_embedding, start_index,
