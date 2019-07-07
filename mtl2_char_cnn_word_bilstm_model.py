@@ -305,10 +305,10 @@ class MTL2CharCNNWordBilstmModel():
                             label_index = non_padded_label[i][j]
                             predicted_index = non_padded_predicted[i][j]
 
-                            f.write(
-                                '{}\tPOS\t{}\t{}\n'.format(id2word[word_index], id2tag[label_index],
-                                                           id2tag[predicted_index]))
-                            # f.write('{}\n'.format(id2tag[predicted_index]))
+                            # f.write(
+                            #     '{}\tPOS\t{}\t{}\n'.format(id2word[word_index], id2tag[label_index],
+                            #                                id2tag[predicted_index]))
+                            f.write('{}\n'.format(id2tag[predicted_index]))
                         f.write('\n')
 
         flat_pred = []
