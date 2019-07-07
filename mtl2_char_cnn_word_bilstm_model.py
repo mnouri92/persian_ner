@@ -198,7 +198,7 @@ class MTL2CharCNNWordBilstmModel():
 
     def train_graph(self, task1_train_word_seq, task1_train_tag_seq, task1_train_char_seq,
                     task2_train_word_seq, task2_train_tag_seq, task2_train_char_seq,
-                    word_embedding):
+                    word_embedding, epoch_start=0):
 
         task1_num_sen = len(task1_train_word_seq)
         task2_num_sen = len(task2_train_word_seq)
@@ -208,7 +208,7 @@ class MTL2CharCNNWordBilstmModel():
         batch_number_task2 = 0
         end_index_task1 = 0
         end_index_task2 = 0
-        for epoch in range(self.cfg.lstm_model_max_epoch):
+        for epoch in range(epoch_start, self.cfg.lstm_model_max_epoch):
             batch_number_task1 = 0
             end_index_task1 = 0
             while end_index_task1 < task1_num_sen:
