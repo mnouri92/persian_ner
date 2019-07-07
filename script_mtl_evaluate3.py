@@ -38,7 +38,7 @@ normalizer = CharNormalizer()
 mod = MTL2CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, cfg, cfg.max_char)
 mod.build_graph()
 mod.restore_graph()
-
+vocab_id2word[-1] = "OOV"
 onlyfiles = [f for f in listdir(test_conll_data_directory_input) if isfile(join(test_conll_data_directory_input, f))]
 for filename in onlyfiles:
     print("======================{}=======================".format(filename))
