@@ -12,7 +12,7 @@ chmod +x train.sh
 In order to evaluate the model with the learned model run the following code:
 
 ```angular2html
-chmod +x evaluate.sh
+chmod +x evaluate.sh {path to the zip file}
 ./evaluate.sh
 ```
 
