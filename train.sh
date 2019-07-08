@@ -1,5 +1,9 @@
 #!/bin/bash
 
+pip install hazm
+pip install numpy==1.16.1
+pip install tensorflow==1.14
+
 mkdir files
 mkdir files/data
 mkdir files/model
