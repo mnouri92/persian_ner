@@ -40,8 +40,10 @@ mod.build_graph()
 mod.restore_graph()
 vocab_id2word[-1] = "OOV"
 onlyfiles = [f for f in listdir(test_conll_data_directory_input) if isfile(join(test_conll_data_directory_input, f))]
+counter=1
 for filename in onlyfiles:
-    print("======================{}=======================".format(filename))
+    print("==================={}/{}:{}=======================".format(counter, len(onlyfiles), filename))
+    counter+=1
     filename_without_extension = os.path.splitext(filename)[0]
     output_file = join(test_conll_data_directory_output, filename_without_extension +".predict")
     input_file = join(test_conll_data_directory_input, filename)
