@@ -14,7 +14,7 @@ mkdir files/data/ner_armanperso
 
 git pull
 
-cp $1 tokenout.zip
+cp $1 ./
 rm -rf nsurl
 mkdir nsurl
 unzip tokenout.zip -d nsurl
