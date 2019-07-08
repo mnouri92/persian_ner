@@ -18,3 +18,4 @@ chmod +x evaluate.sh {path to the zip file}
 
 In order to use the pretrained models, download them from <a href="https://www.dropbox.com/sh/hagmzbq7nh4vfuj/AACgIuwWUXRT5FChz3RucI_5a?dl=0">this link</a> and place all the files in "files/model/"
 
+Final zip file is saved in `nsurl/final_results/prediction.zip` which can be submitted as a new entry in the NSURL task.
