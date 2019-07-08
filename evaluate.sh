@@ -22,7 +22,7 @@ unzip tokenout.zip -d nsurl
 mkdir "nsurl/results"
 mkdir "nsurl/final_results"
 
-python script_mtl_evaluate3.py "nsurl/" "nsurl/results/"
+python script_mtl_evaluate3.py "nsurl/tokenout" "nsurl/results/"
 python finalize_nsurl.py nsurl/results nsurl/final_results
 
 cd "nsurl/final_results"
