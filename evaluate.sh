@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo $1
+
 pip install hazm
 pip install numpy==1.16.1
 pip install tensorflow==1.14
