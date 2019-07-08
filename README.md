@@ -16,8 +16,5 @@ chmod +x evaluate.sh
 ./evaluate.sh
 ```
 
-In order you want to use pretrained models download them from the link below and place all the files in "files/model/"
+In order you want to use pretrained models download them from <a href="https://www.dropbox.com/sh/hagmzbq7nh4vfuj/AACgIuwWUXRT5FChz3RucI_5a?dl=0">this link</a> and place all the files in "files/model/"
 
-```angular2html
-https://www.dropbox.com/sh/hagmzbq7nh4vfuj/AACgIuwWUXRT5FChz3RucI_5a?dl=0
-```
