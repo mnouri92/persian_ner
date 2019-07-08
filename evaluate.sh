@@ -23,7 +23,7 @@ mkdir "nsurl/results"
 mkdir "nsurl/final_results"
 
 python script_mtl_evaluate3.py "nsurl/" "nsurl/results/"
-python finalize_nsurl nsurl/results nsurl/final_results
+python finalize_nsurl.py nsurl/results nsurl/final_results
 
 cd "nsurl/final_results"
 zip prediction.zip ./*
