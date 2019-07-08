@@ -14,10 +14,10 @@ mkdir files/data/ner_armanperso
 
 git pull
 
-cp $1 ./tokenout.zip
+cp $1 tokenout.zip
 rm -rf nsurl
 mkdir nsurl
-unzip /content/tokenout.zip -d nsurl
+unzip tokenout.zip -d nsurl
 
 mkdir "nsurl/tokenout/results"
 mkdir "nsurl/tokenout/final_results"
