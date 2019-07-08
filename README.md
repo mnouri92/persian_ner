@@ -9,6 +9,8 @@ chmod +x train.sh
 ./train.sh
 ```
 
+You can choose either learn the model from scratch or continue learning from previously learned model by providing appropriate answer to the question in the training phase.
+
 In order to evaluate the model with the learned model run the following code:
 
 ```angular2html
