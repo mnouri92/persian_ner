@@ -19,13 +19,13 @@ rm -rf nsurl
 mkdir nsurl
 unzip tokenout.zip -d nsurl
 
-mkdir "nsurl/tokenout/results"
-mkdir "nsurl/tokenout/final_results"
+mkdir "nsurl/results"
+mkdir "nsurl/final_results"
 
-python script_mtl_evaluate3.py "nsurl/tokenout/" "nsurl/tokenout/results/"
-python finalize_nsurl nsurl/tokenout/results nsurl/tokenout/final_results
+python script_mtl_evaluate3.py "nsurl/" "nsurl/results/"
+python finalize_nsurl nsurl/results nsurl/final_results
 
-cd "nsurl/tokenout/final_results"
+cd "nsurl/final_results"
 zip prediction.zip ./*
 
 
