@@ -49,9 +49,11 @@ logger.info("loading data again.")
 
 mod = MTL2CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, cfg, cfg.max_char)
 mod.build_graph()
-file_name = mod.restore_graph()
-splitted_file_name = file_name.split("-")
-epoch_number = int(splitted_file_name[-1])+1
+epoch_number = 0
+if answer != "no":
+    file_name = mod.restore_graph()
+    splitted_file_name = file_name.split("-")
+    epoch_number = int(splitted_file_name[-1])+1
 
 
 mod.train_graph(task1_train_word_seq=task1_train_words, task1_train_tag_seq=task1_train_tags, task1_train_char_seq=task1_train_chars
