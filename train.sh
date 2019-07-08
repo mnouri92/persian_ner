@@ -13,7 +13,7 @@ wget -c https://www.dropbox.com/s/ju6okh5aw24ozyy/train.data?dl=0
 mv train.data?dl=0 files/data/ner_bijankhan/train.data
 
 wget -c https://www.dropbox.com/s/4fjosovc8e10wro/validation.data?dl=0
-mv train.data?dl=0 files/data/ner_bijankhan/validation.data
+mv validation.data?dl=0 files/data/ner_bijankhan/validation.data
 
 wget -c https://www.dropbox.com/s/hdqf7j9ftyoccml/train.data?dl=0
 mv train.data?dl=0 files/data/ner_armanperso/train.data
