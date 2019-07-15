@@ -47,7 +47,7 @@ logger.info("loading data again.")
 [task1_train_words, task1_train_tags, task1_train_chars] = load_sequence_data(cfg.file_seq_task1_train_data)
 [task2_train_words, task2_train_tags, task2_train_chars] = load_sequence_data(cfg.file_seq_task2_train_data)
 
-mod = MTL2CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, cfg, cfg.max_char)
+mod = MTL2CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, cfg, char_size)
 mod.build_graph()
 epoch_number = 0
 if answer != "no":
