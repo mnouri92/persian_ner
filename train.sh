@@ -2,7 +2,6 @@
 
 pip install -r requirement.txt
 
-
 mkdir files
 mkdir files/data
 mkdir files/model
