@@ -3,17 +3,17 @@ import logging
 import sys
 
 def setup_custom_logger(name):
-    formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
-                                  datefmt='%Y-%m-%d %H:%M:%S')
-    handler = logging.FileHandler('logs.txt', mode='a')
-    handler.setFormatter(formatter)
-    screen_handler = logging.StreamHandler(stream=sys.stdout)
-    screen_handler.setFormatter(formatter)
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
-    logger.addHandler(handler)
-    logger.addHandler(screen_handler)
+    if not logger.handlers:
+        # Prevent logging from propagating to the root logger
+        logger.propagate = 0
+        console = logging.StreamHandler()
+        logger.addHandler(console)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s')
+        console.setFormatter(formatter)
     return logger
+
 
 logger = setup_custom_logger(__name__)
 
