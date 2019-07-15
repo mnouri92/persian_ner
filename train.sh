@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ "$#" -ne 1 ]; then
+    echo "Illegal number of parameters. The firts parameter must be the path of the word embedding file."
+    exit 1
+fi
+
 pip install -r requirement.txt
 
 mkdir files
