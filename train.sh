@@ -8,8 +8,6 @@ mkdir files/model
 mkdir files/data/ner_bijankhan
 mkdir files/data/ner_armanperso
 
-git pull
-
 if [ ! -f files/data/ner_bijankhan/train.data ]
 then
     wget https://www.dropbox.com/s/hdqf7j9ftyoccml/train.data?dl=0
