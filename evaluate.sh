@@ -1,28 +1,23 @@
 #!/bin/bash
 
-echo $1
+if [ "$#" -ne 2 ]; then
+    echo "Illegal number of parameters. The firts parameter is the path of the input directory. The second parameter is the path of the output directory..."
+    exit 1
+fi
 
+mkdir $2
 mkdir files
 mkdir files/data
 mkdir files/model
 mkdir files/data/ner_bijankhan
 mkdir files/data/ner_armanperso
 
-git pull
+mkdir "nsurl/tmp"
 
-cp $1 ./
-rm -rf nsurl
-mkdir nsurl
-unzip tokenout.zip -d nsurl
+python script_mtl_evaluate3.py $1 "nsurl/tmp"
+python finalize_nsurl.py "nsurl/tmp" $2
 
-mkdir "nsurl/results"
-mkdir "nsurl/final_results"
-
-python script_mtl_evaluate3.py "nsurl/tokenout" "nsurl/results/"
-python finalize_nsurl.py nsurl/results nsurl/final_results
-
-cd "nsurl/final_results"
-zip prediction.zip ./*
+rm -rf "nsurl/tmp"
 
 
 
