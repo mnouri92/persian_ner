@@ -18,7 +18,7 @@ class MTLConfig():
         self.file_conll_task2_train_data = self.file_conll_task2_directory + "train.data"
         self.file_seq_task2_train_data = self.file_conll_task2_train_data + ".seq"
 
-        self.file_full_word_embedding = self.base_directory_path + "wiki_news_fasttext_sg_d300_w10.vec"
+        self.file_full_word_embedding = self.base_directory_path + "we.vec"
         self.file_trimmed_word_embedding = self.base_directory_model + "word_embedding.trimmed"
         self.file_word_vocab = self.base_directory_model + "vocab.words"
         self.file_char_vocab = self.base_directory_model + "vocab.chars"

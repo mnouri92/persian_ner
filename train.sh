@@ -28,4 +28,9 @@ then
     mv train.data?dl=0 files/data/ner_armanperso/train.data
 fi
 
+if [ ! -f files/we.vec ]
+then
+    cp $1 files/we.vec
+fi
+
 python script_mtl_train.py

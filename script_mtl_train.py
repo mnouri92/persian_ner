@@ -6,7 +6,7 @@ logger = setup_custom_logger(__name__)
 
 cfg = MTLConfig("files/")
 
-answer = input("continue from previous learned models (probabely to improve them)?")
+answer = input("continue from previous learned models (probabely to improve them)?(yes/no)")
 if answer == "no":
     logger.info("bulding vocabulray")
     [word_vocab, tag_vocab, char_vocab, max_char] = build_vocab([
