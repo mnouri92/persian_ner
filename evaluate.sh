@@ -10,7 +10,7 @@ pip install -r requirement.txt
 mkdir $2
 mkdir "nsurl/tmp"
 
-python script_mtl_evaluate3.py $1 "nsurl/tmp"
+python script_mtl_evaluate.py $1 "nsurl/tmp"
 python finalize_nsurl.py "nsurl/tmp" $2
 
 rm -rf "nsurl/tmp"
