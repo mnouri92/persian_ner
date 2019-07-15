@@ -35,7 +35,7 @@ tag_size = max(vocab_id2tag, key=int) + 1
 char_size = max(vocab_id2char, key=int) + 1
 
 normalizer = CharNormalizer()
-mod = MTL2CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, cfg, cfg.max_char)
+mod = MTL2CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, cfg, char_size)
 mod.build_graph()
 mod.restore_graph()
 vocab_id2word[-1] = "OOV"
