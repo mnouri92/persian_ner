@@ -1,6 +1,6 @@
-from mtl2_char_cnn_word_bilstm_model import MTL2CharCNNWordBilstmModel
+from model import MTL2CharCNNWordBilstmModel
 from utility import *
-from mtl_config import MTLConfig
+from config import MTLConfig
 
 logger = setup_custom_logger(__name__)
 
