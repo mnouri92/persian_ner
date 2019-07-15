@@ -5,13 +5,9 @@ if [ "$#" -ne 2 ]; then
     exit 1
 fi
 
-mkdir $2
-mkdir files
-mkdir files/data
-mkdir files/model
-mkdir files/data/ner_bijankhan
-mkdir files/data/ner_armanperso
+pip install -r requirement.txt
 
+mkdir $2
 mkdir "nsurl/tmp"
 
 python script_mtl_evaluate3.py $1 "nsurl/tmp"
