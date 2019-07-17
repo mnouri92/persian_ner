@@ -190,9 +190,12 @@ def convert_conll_to_numpy_array(file_name, vocab_word, vocab_tag, vocab_char, o
                 current_sentence_char = []
             else:
                 splitted_line = line.split()
-                assert len(splitted_line) == 2
-                word = splitted_line[0]
-                tag = splitted_line[1]
+                if len(splitted_line) == 1:
+                    word = splitted_line[0]
+                    tag = "O"
+                elif len(splitted_line) == 2:
+                    word = splitted_line[0]
+                    tag = splitted_line[1]
                 if word in vocab_word.keys():
                     current_sentence_word.append(vocab_word[word])
                 else:
