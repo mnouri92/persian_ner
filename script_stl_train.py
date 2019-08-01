@@ -3,8 +3,8 @@ from utility import *
 from stl_config import Config
 logger = setup_custom_logger(__name__)
 
-# base_directory_path = sys.argv[1]
-base_directory_path = "/home/hadi/PycharmProjects/persian_ner_github/files/coref/data"
+base_directory_path = sys.argv[1]
+# base_directory_path = "/home/hadi/PycharmProjects/persian_ner_github/files/coref/data"
 
 cfg = Config(base_directory_path)
 
