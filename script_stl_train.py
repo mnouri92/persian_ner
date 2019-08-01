@@ -60,10 +60,10 @@ mod = STLCharCNNWordBilstmModel(vocab_size, dim, tag_size, cfg.max_char, cfg.cha
                                 , cfg.lstm_model_rnn_lr, cfg.dir_tensoboard_log, cfg.dir_checkpoints, char_size)
 mod.build_graph()
 epoch_number = 0
-if answer != "no":
-    file_name = mod.restore_graph()
-    splitted_file_name = file_name.split("-")
-    epoch_number = int(splitted_file_name[-1])+1
+# if answer != "no":
+#     file_name = mod.restore_graph()
+#     splitted_file_name = file_name.split("-")
+#     epoch_number = int(splitted_file_name[-1])+1
 
 mod.train_graph(train_word_seq=train_words, train_tag_seq=train_tags, train_char_seq=train_chars
                 , word_embedding=twe, epoch_start=epoch_number, epoch_end = 100, batch_size = cfg.lstm_model_batch_size)
