@@ -5,9 +5,6 @@ from utility import remove_padding, pad_sequences
 import os
 from sklearn.metrics import confusion_matrix
 
-
-
-
 class MTL2CharCNNWordBilstmModel():
 
     def __init__(self, vocab_size, dim, task1_tag_size, task2_tag_size, config, char_size = 0):

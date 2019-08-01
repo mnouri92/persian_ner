@@ -1,4 +1,4 @@
-from model import MTL2CharCNNWordBilstmModel
+from mtl_model import MTL2CharCNNWordBilstmModel
 from utility import *
 from config import MTLConfig
 

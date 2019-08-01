@@ -1,4 +1,4 @@
-from model import MTL2CharCNNWordBilstmModel
+from mtl_model import MTL2CharCNNWordBilstmModel
 
 from charnomalizer import CharNormalizer
 from hazm import sent_tokenize, word_tokenize
