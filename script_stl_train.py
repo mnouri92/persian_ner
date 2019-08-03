@@ -42,6 +42,10 @@ char_size = max(vocab_id2char, key=int) + 1
 logger.info("loading data again.")
 [words, tags, chars] = load_sequence_data(cfg.file_seq_train_data)
 
+words = words[:100]
+tags = tags[:100]
+chars = chars[:100]
+
 num_data = len(words)
 num_train = int(0.95*num_data)
 
