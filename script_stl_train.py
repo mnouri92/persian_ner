@@ -42,9 +42,9 @@ char_size = max(vocab_id2char, key=int) + 1
 logger.info("loading data again.")
 [words, tags, chars] = load_sequence_data(cfg.file_seq_train_data)
 
-words = words[:100]
-tags = tags[:100]
-chars = chars[:100]
+# words = words[:100]
+# tags = tags[:100]
+# chars = chars[:100]
 
 num_data = len(words)
 num_train = int(0.95*num_data)
@@ -69,5 +69,5 @@ epoch_number = 0
 #     splitted_file_name = file_name.split("-")
 #     epoch_number = int(splitted_file_name[-1])+1
 
-mod.train_graph(train_word_seq=train_words, train_tag_seq=train_tags, train_char_seq=train_chars, val_word_seq=train_words, val_tag_seq=train_tags, val_char_seq=train_chars
+mod.train_graph(train_word_seq=train_words, train_tag_seq=train_tags, train_char_seq=train_chars, val_word_seq=val_words, val_tag_seq=val_tags, val_char_seq=val_chars
                 , word_embedding=twe, epoch_start=epoch_number, epoch_end = 100, batch_size = cfg.lstm_model_batch_size)
