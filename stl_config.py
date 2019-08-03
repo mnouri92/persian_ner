@@ -21,7 +21,7 @@ class Config():
         self.char_embedding_dimension        = 100
 
         #LSTM_MODE
-        self.lstm_model_batch_size           = 32
+        self.lstm_model_batch_size           = 16
         self.lstm_model_hidden_size          = 300
         self.lstm_model_rnn_dropout          = 0.5
         self.lstm_model_rnn_lr               = 0.001
