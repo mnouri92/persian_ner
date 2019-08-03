@@ -3,7 +3,7 @@ import numpy as np
 from utility import setup_custom_logger
 from utility import remove_padding, pad_sequences
 import os
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
 
 class STLCharCNNWordBilstmModel():
 
@@ -36,41 +36,24 @@ class STLCharCNNWordBilstmModel():
 
     def add_placeholders(self):
 
-        # [batch_size, max_sentence_length_in_batch]
-        self.word_ids = tf.placeholder(dtype=tf.int32, shape=[None, None], name='word_ids')
-
-        # [batch_size]
-        self.sentence_lenghts = tf.placeholder(dtype=tf.int32, shape=[None], name='sentence_lenghts')
-
-        # [batch_size, max_sentence_length_in_batch, max_word_length_in_batch]
-        self.char_ids = tf.placeholder(dtype=tf.int32, shape=[None, None, self.max_word_len], name='char_ids')
-
-        # [batch_size, max_sentence_length_in_batch]
-        self.word_lengths = tf.placeholder(dtype=tf.int32, shape=[None, None], name='word_lenghts')
-
-        # [batch_size, max_sentence_length_in_batch]
-        self.labels = tf.placeholder(dtype=tf.int32, shape=[None, None], name='labels')
-
-        self.dropout = tf.placeholder(dtype=tf.float32, shape=[], name='dropout')
+        self.word_ids           = tf.placeholder(dtype=tf.int32, shape=[None, None], name='word_ids')                       #shape=[batch_size, max_sentence_length_in_batch]
+        self.sentence_lenghts   = tf.placeholder(dtype=tf.int32, shape=[None], name='sentence_lenghts')                     #shape=[batch_size]
+        self.char_ids           = tf.placeholder(dtype=tf.int32, shape=[None, None, self.max_word_len], name='char_ids')    #shape=[batch_size, max_sentence_length_in_batch, max_word_length_in_batch]
+        self.word_lengths       = tf.placeholder(dtype=tf.int32, shape=[None, None], name='word_lenghts')                   #shape=[batch_size, max_sentence_length_in_batch]
+        self.labels             = tf.placeholder(dtype=tf.int32, shape=[None, None], name='labels')                         #shape=[batch_size, max_sentence_length_in_batch]
+        self.dropout            = tf.placeholder(dtype=tf.float32, shape=[], name='dropout')                                #shape=scalar
+        self.word_embeddings    = tf.placeholder(dtype=tf.float32, shape=[None, self.dim])                                  #shape=[vocab_size, embedding_dim]
 
     def add_word_embeddings_op(self):
-
-        # [vocab_size, embedding_dim]
-        self.word_embeddings = tf.placeholder(dtype=tf.float32, shape=[None, self.dim])
-        # v = tf.Variable(dtype=tf.float32, initial_value=np.full((self.vocab_size, self.dim), 0))
-        # self.word_embeddings_var = tf.assign(v, self.word_embeddings)
-        # self.word_embeddings_var = tf.get_variable(name="word_embeddings", dtype=tf.float32 , shape=[self.vocab_size, self.dim], initializer=tf.random_normal_initializer(), trainable=True)
-        self.embedded_words = tf.nn.embedding_lookup(self.word_embeddings, self.word_ids, name='embedded_words')
-
+        self.embedded_words = tf.nn.embedding_lookup(self.word_embeddings, self.word_ids, name='embedded_words')            #shape=[batch_size, max_sentence_length_in_batch, word_emb_dim]
         char_embedding = tf.get_variable(name="char_embeddings", dtype=tf.float32
-                                         , shape=[self.char_size, self.char_emb_dim])
-        embedded_chars = tf.nn.embedding_lookup(char_embedding, self.char_ids, name='embedded_chars')
-
+                                         , shape=[self.char_size, self.char_emb_dim])                                       #shape=[num_unique_chars, char_emb_dim]
+        embedded_chars = tf.nn.embedding_lookup(char_embedding, self.char_ids, name='embedded_chars')                       #shape=[batch_size, max_sentence_length_in_batch, max_word_length_in_batch, char_emb_dim]
         s = tf.shape(embedded_chars)
 
-        embedded_chars = tf.reshape(embedded_chars, shape=[-1,self.max_word_len,self.char_emb_dim])
+        embedded_chars = tf.reshape(embedded_chars, shape=[-1,self.max_word_len,self.char_emb_dim])                         #shape=[batch_size*max_sentence_length_in_batch, max_word_length_in_batch, char_emb_dim]
 
-        embedded_chars = tf.expand_dims(embedded_chars, -1)
+        embedded_chars = tf.expand_dims(embedded_chars, -1)                                                                 #shape=[batch_size*max_sentence_length_in_batch, max_word_length_in_batch, char_emb_dim, 1]
 
         num_filter = 128
         filter_sizes= [2,3,4,5,6]
@@ -82,11 +65,11 @@ class STLCharCNNWordBilstmModel():
             pool = tf.layers.max_pooling2d(conv, (self.max_word_len - filter_size + 1, 1), (1, 1))
             pool = tf.reshape(pool, shape=[s[0], s[1], num_filter])
             pooled_outputs.append(pool)
-        concat_pooled = tf.concat(pooled_outputs, 2)
+        concat_pooled = tf.concat(pooled_outputs, 2)                                                                        #shape=[batch_size, max_sentence_length_in_batch, num_filter*len(filter_sizes)]
 
 
-        self.embedded_words = tf.concat([self.embedded_words, concat_pooled], axis=-1)
-        self.embedded_words = tf.nn.dropout(self.embedded_words, self.dropout)
+        self.embedded_words = tf.concat([self.embedded_words, concat_pooled], axis=-1)                                      #shape=[batch_size, max_sentence_length_in_batch, num_filter*len(filter_sizes)+word_emb_dim]
+        self.embedded_words = tf.nn.dropout(self.embedded_words, self.dropout)                                              #shape=[batch_size, max_sentence_length_in_batch, num_filter*len(filter_sizes)+word_emb_dim]
 
     def add_lstm(self):
         with tf.variable_scope('bilstm'):
@@ -101,17 +84,17 @@ class STLCharCNNWordBilstmModel():
             output_word = tf.concat([outputs_fw, outputs_bw], axis=2)
 
 
-        self.lstm_layer_output = tf.nn.dropout(output_word, self.dropout)
+        self.lstm_layer_output = tf.nn.dropout(output_word, self.dropout)                                                   #shape=[batch_size, max_sentence_length_in_batch, 2*lstm_hidden_size]
 
 
     def add_fcn(self):
         with tf.variable_scope('fcn'):
-            W = tf.get_variable(name="W", dtype=tf.float32, shape=[4 * self.lstm_size, self.tag_size])
+            W = tf.get_variable(name="W", dtype=tf.float32, shape=[2 * self.lstm_size, self.tag_size])
             b = tf.get_variable(name="b", dtype=tf.float32, shape=[self.tag_size], initializer=tf.zeros_initializer())
             nsteps = tf.shape(self.lstm_layer_output)[1]
-            output = tf.reshape(self.lstm_layer_output, shape=[-1, 4 * self.lstm_size])
+            output = tf.reshape(self.lstm_layer_output, shape=[-1, 2 * self.lstm_size])
             output = tf.matmul(output, W) + b
-            self.logits = tf.reshape(output, shape=[-1, nsteps, self.tag_size])
+            self.logits = tf.reshape(output, shape=[-1, nsteps, self.tag_size])                                             #shape=[batch_size, max_sentence_length_in_batch, tag_size]
 
     def add_train_op(self):
 
@@ -154,7 +137,7 @@ class STLCharCNNWordBilstmModel():
         }
         return feed_dict, current_batch_sen_len, current_batch_word_seq, current_batch_tag_seq
 
-    def train_graph(self, train_word_seq, train_tag_seq, train_char_seq,
+    def train_graph(self, train_word_seq, train_tag_seq, train_char_seq, val_word_seq, val_tag_seq, val_char_seq,
                     word_embedding, epoch_start, epoch_end, batch_size):
 
         num_sen = len(train_word_seq)
@@ -182,15 +165,14 @@ class STLCharCNNWordBilstmModel():
 
                 batch_number += 1
 
-            # choice1: save model after each epoch and terminate after specified epoch number
-            save_path = self.saver.save(self.sess, "{}/bilstm_ner".format(self.chkpnts_path),
+            save_path = self.saver.save(self.sess, "{}/stl_ner".format(self.chkpnts_path),
                                         global_step=int(epoch), write_meta_graph=False)
             self.logger.info("model is saved in: {}{}".format(save_path, ''.join([' '] * 100)))
 
             self.writer.add_summary(summary, epoch)
-            self.logger.info(
-                ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.epoch: {} loss on validation: {}".format(epoch, loss))
 
+            acc = self.evaluate_model(val_word_seq, val_tag_seq, val_char_seq, word_embedding, batch_size)
+            self.logger.info("epoch: {} accuracy on validation: {}".format(epoch, acc))
 
     def restore_graph(self):
         self.saver.restore(self.sess, tf.train.latest_checkpoint(self.chkpnts_path))
