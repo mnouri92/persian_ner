@@ -204,6 +204,7 @@ def convert_conll_to_numpy_array(file_name, vocab_word, vocab_tag, vocab_char, o
                 current_sentence_tag.append(vocab_tag[tag])
                 current_word_chars = [vocab_char[x] for x in word if x in vocab_char.keys()]
                 current_word_chars += [0]*(max_char-len(current_word_chars))
+                current_word_chars = current_word_chars[:max_char]
                 current_sentence_char.append(current_word_chars)
         if len(current_sentence_word) > 0:
             all_sentences_word.append(current_sentence_word)
