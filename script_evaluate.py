@@ -113,7 +113,6 @@ for filename in onlyfiles:
 
     [test_words, test_tags, test_chars] = load_sequence_data(input_file + ".seq")
     mod.evaluate_model(test_word_seq=test_words, test_tag_seq=test_tags, test_char_seq=test_chars, word_embedding=twe
-                       , id2word=vocab_id2word, id2tag=vocab_id2tag, result_file_path=output_file, task_number=1)
-
+                       , id2word=vocab_id2word, id2tag=vocab_id2tag, result_file_path=output_file)
 
 
