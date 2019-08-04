@@ -13,16 +13,16 @@ mkdir files/stl/ner_bijankhan
 mkdir files/stl/ner_bijankhan/data
 mkdir files/stl/ner_bijankhan/model
 
-if [ ! -f files/mtl/ner_bijankhan/data/train.data ]
+if [ ! -f files/stl/ner_bijankhan/data/train.data ]
 then
     wget https://www.dropbox.com/s/hdqf7j9ftyoccml/train.data?dl=0
-    mv train.data?dl=0 files/mtl/ner_bijankhan/data/train.data
+    mv train.data?dl=0 files/stl/ner_bijankhan/data/train.data
 fi
 
-if [ ! -f files/mtl/ner_bijankhan/we.vec ]
+if [ ! -f files/stl/ner_bijankhan/we.vec ]
 then
-    cp "$1" "files/mtl/ner_bijankhan/we.vec"
+    cp "$1" "files/stl/ner_bijankhan/we.vec"
 fi
 
-python script_train.py "stl" files/mtl/ner_bijankhan/
+python script_train.py "stl" files/stl/ner_bijankhan/
 
