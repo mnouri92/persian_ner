@@ -112,7 +112,7 @@ for filename in onlyfiles:
                                  input_file + ".seq", cfg.max_char)
 
     [test_words, test_tags, test_chars] = load_sequence_data(input_file + ".seq")
-    mod.evaluate_model(test_word_seq=test_words, test_tag_seq=test_tags, test_char_seq=test_chars, word_embedding=twe
+    mod.evaluate_model(test_word_seq=test_words, test_tag_seq=test_tags, test_char_seq=test_chars, word_embedding=twe, batch_size = cfg.batch_size
                        , id2word=vocab_id2word, id2tag=vocab_id2tag, result_file_path=output_file)
 
 
