@@ -33,3 +33,4 @@ then
 fi
 
 python script_train.py "mtl" files/mtl/ner_bijankhan/ files/mtl/ner_armanperso/
+
