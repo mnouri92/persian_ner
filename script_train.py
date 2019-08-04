@@ -9,7 +9,8 @@ logger = setup_custom_logger(__name__)
 
 type = sys.argv[1]
 main_task_directory_path = sys.argv[2]
-aux_task_directory_path = sys.argv[3]
+if type == "mtl"
+    aux_task_directory_path = sys.argv[3]
 
 if type == "stl":
     cfg = Config(main_task_directory_path)
