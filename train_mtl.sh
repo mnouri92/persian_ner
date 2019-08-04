@@ -27,9 +27,9 @@ then
     mv train.data?dl=0 files/mtl/ner_armanperso/data/train.data
 fi
 
-if [ ! -f files/we.vec ]
+if [ ! -f files/mtl/ner_bijankhan/we.vec ]
 then
-    cp $1 files/we.vec
+    cp $1 "files/mtl/ner_bijankhan/we.vec"
 fi
 
 python script_train.py "mtl" files/mtl/ner_bijankhan/ files/mtl/ner_armanperso/
