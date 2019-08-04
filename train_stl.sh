@@ -8,12 +8,10 @@ fi
 pip install -r requirement.txt
 
 mkdir files
-mkdir files/mtl
-mkdir files/mtl/ner_bijankhan
-mkdir files/mtl/ner_bijankhan/data
-mkdir files/mtl/ner_bijankhan/model
-mkdir files/mtl/ner_armanperso
-mkdir files/mtl/ner_armanperso/data
+mkdir files/stl
+mkdir files/stl/ner_bijankhan
+mkdir files/stl/ner_bijankhan/data
+mkdir files/stl/ner_bijankhan/model
 
 if [ ! -f files/mtl/ner_bijankhan/data/train.data ]
 then
@@ -21,9 +19,10 @@ then
     mv train.data?dl=0 files/mtl/ner_bijankhan/data/train.data
 fi
 
-if [ ! -f files/we.vec ]
+if [ ! -f files/mtl/ner_bijankhan/we.vec ]
 then
-    cp $1 files/we.vec
+    cp "$1" "files/mtl/ner_bijankhan/we.vec"
 fi
 
-python script_train.py "stl" files/mtl/ner_bijankhan/
+python script_train.py "mtl" files/mtl/ner_bijankhan/ files/mtl/ner_armanperso/
+
