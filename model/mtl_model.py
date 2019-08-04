@@ -230,14 +230,14 @@ class MTL2CharCNNWordBilstmModel():
                 end_index_task2 = min([start_index_task2 + batch_size, task2_num_sen])
 
                 feed_dict, current_batch_len, current_batch_word_seq, current_batch_tag_seq = \
-                    self.create_feed_dict(main_task_train_word_seq, main_task_train_tag_seq, main_task_train_char_seq, word_embedding, start_index_task1, end_index_task1, self.dropout)
+                    self.create_feed_dict(main_task_train_word_seq, main_task_train_tag_seq, main_task_train_char_seq, word_embedding, start_index_task1, end_index_task1, 0.5)
                 [summary, _, loss] = self.sess.run([self.task1_trainloss, self.task1_train, self.task1_loss], feed_dict)
                 if batch_number_task1 % 50 == 0:
                     self.writer.add_summary(summary, total_counter)
                     self.logger.info("epoch: {} batch: {} task: 1 loss on train: {}".format(epoch, batch_number_task1, loss))
 
                 feed_dict, current_batch_len, current_batch_word_seq, current_batch_tag_seq = \
-                    self.create_feed_dict(aux_task_train_word_seq, aux_task_train_tag_seq, aux_task_train_char_seq, word_embedding, start_index_task2, end_index_task2, self.dropout)
+                    self.create_feed_dict(aux_task_train_word_seq, aux_task_train_tag_seq, aux_task_train_char_seq, word_embedding, start_index_task2, end_index_task2, 0.5)
                 [summary, _, loss] = self.sess.run([self.task2_trainloss, self.task2_train, self.task2_loss], feed_dict)
                 if batch_number_task2 % 50 == 0:
                     self.writer.add_summary(summary, total_counter)
