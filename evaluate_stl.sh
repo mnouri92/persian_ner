@@ -9,6 +9,6 @@ pip install -r requirement.txt
 
 mkdir $2
 
-python script_evaluate.py "mtl" "files/mtl/ner_bijankhan/" $1 $2
+python script_evaluate.py "stl" "files/mtl/ner_bijankhan/" $1 $2
 
 
