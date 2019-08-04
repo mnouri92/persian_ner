@@ -1,20 +1,26 @@
 import tensorflow as tf
 import numpy as np
-from utility import setup_custom_logger
-from utility import remove_padding, pad_sequences
+from common.utility import setup_custom_logger
+from common.utility import remove_padding, pad_sequences
 import os
 from sklearn.metrics import confusion_matrix
 
 class MTL2CharCNNWordBilstmModel():
 
-    def __init__(self, vocab_size, dim, task1_tag_size, task2_tag_size, config, char_size = 0):
+    def __init__(self, vocab_size, dim, task1_tag_size, task2_tag_size, max_word_len, char_emb_dim, lstm_size, learning_rate
+                 , tensorboard_log, chkpnts_path, char_size):
         self.vocab_size = vocab_size
         self.dim = dim
         self.task1_tag_size = task1_tag_size
         self.task2_tag_size = task2_tag_size
         self.char_size = char_size
         self.logger = setup_custom_logger(__name__)
-        self.cfg = config
+        self.max_word_len = max_word_len
+        self.char_emb_dim = char_emb_dim
+        self.lstm_size = lstm_size
+        self.learning_rate = learning_rate
+        self.tensorboard_log = tensorboard_log
+        self.chkpnts_path = chkpnts_path
         print('MTL2CharCNNWordBilstmModel')
 
         return
@@ -38,7 +44,7 @@ class MTL2CharCNNWordBilstmModel():
         self.sentence_lenghts = tf.placeholder(dtype=tf.int32, shape=[None], name='sentence_lenghts')
 
         # [batch_size, max_sentence_length_in_batch, max_word_length_in_batch]
-        self.char_ids = tf.placeholder(dtype=tf.int32, shape=[None, None, self.cfg.max_char], name='char_ids')
+        self.char_ids = tf.placeholder(dtype=tf.int32, shape=[None, None, self.max_word_len], name='char_ids')
 
         # [batch_size, max_sentence_length_in_batch]
         self.word_lengths = tf.placeholder(dtype=tf.int32, shape=[None, None], name='word_lenghts')
@@ -58,12 +64,12 @@ class MTL2CharCNNWordBilstmModel():
         self.embedded_words = tf.nn.embedding_lookup(self.word_embeddings, self.word_ids, name='embedded_words')
 
         char_embedding = tf.get_variable(name="char_embeddings", dtype=tf.float32
-                                         , shape=[self.char_size, self.cfg.char_embedding_dimension])
+                                         , shape=[self.char_size, self.char_emb_dim])
         embedded_chars = tf.nn.embedding_lookup(char_embedding, self.char_ids, name='embedded_chars')
 
         s = tf.shape(embedded_chars)
 
-        embedded_chars = tf.reshape(embedded_chars, shape=[-1,self.cfg.max_char,self.cfg.char_embedding_dimension])
+        embedded_chars = tf.reshape(embedded_chars, shape=[-1,self.max_word_len,self.char_emb_dim])
 
         embedded_chars = tf.expand_dims(embedded_chars, -1)
 
@@ -72,9 +78,9 @@ class MTL2CharCNNWordBilstmModel():
         pooled_outputs = []
 
         for filter_size in filter_sizes:
-            conv = tf.layers.conv2d(embedded_chars, num_filter, (filter_size, self.cfg.char_embedding_dimension),
+            conv = tf.layers.conv2d(embedded_chars, num_filter, (filter_size, self.char_emb_dim),
                                      activation=tf.nn.relu)
-            pool = tf.layers.max_pooling2d(conv, (self.cfg.max_char - filter_size + 1, 1), (1, 1))
+            pool = tf.layers.max_pooling2d(conv, (self.max_word_len - filter_size + 1, 1), (1, 1))
             pool = tf.reshape(pool, shape=[s[0], s[1], num_filter])
             pooled_outputs.append(pool)
         concat_pooled = tf.concat(pooled_outputs, 2)
@@ -85,8 +91,8 @@ class MTL2CharCNNWordBilstmModel():
 
     def add_lstm(self):
         with tf.variable_scope('task1_bilstm'):
-            cell_fw = tf.contrib.rnn.LSTMCell(num_units=self.cfg.lstm_model_hidden_size)
-            cell_bw = tf.contrib.rnn.LSTMCell(num_units=self.cfg.lstm_model_hidden_size)
+            cell_fw = tf.contrib.rnn.LSTMCell(num_units=self.lstm_size)
+            cell_bw = tf.contrib.rnn.LSTMCell(num_units=self.lstm_size)
             (outputs_fw, outputs_bw), _ = tf.nn.bidirectional_dynamic_rnn(
                 cell_fw=cell_fw,
                 cell_bw=cell_bw,
@@ -96,8 +102,8 @@ class MTL2CharCNNWordBilstmModel():
             task1_output_word = tf.concat([outputs_fw, outputs_bw], axis=2)
 
         with tf.variable_scope('task2_bilstm'):
-            cell_fw = tf.contrib.rnn.LSTMCell(num_units=self.cfg.lstm_model_hidden_size)
-            cell_bw = tf.contrib.rnn.LSTMCell(num_units=self.cfg.lstm_model_hidden_size)
+            cell_fw = tf.contrib.rnn.LSTMCell(num_units=self.lstm_size)
+            cell_bw = tf.contrib.rnn.LSTMCell(num_units=self.lstm_size)
             (outputs_fw, outputs_bw), _ = tf.nn.bidirectional_dynamic_rnn(
                 cell_fw=cell_fw,
                 cell_bw=cell_bw,
@@ -107,8 +113,8 @@ class MTL2CharCNNWordBilstmModel():
             task2_output_word = tf.concat([outputs_fw, outputs_bw], axis=2)
 
         with tf.variable_scope('shared_bilstm'):
-            cell_fw = tf.contrib.rnn.LSTMCell(num_units=self.cfg.lstm_model_hidden_size)
-            cell_bw = tf.contrib.rnn.LSTMCell(num_units=self.cfg.lstm_model_hidden_size)
+            cell_fw = tf.contrib.rnn.LSTMCell(num_units=self.lstm_size)
+            cell_bw = tf.contrib.rnn.LSTMCell(num_units=self.lstm_size)
             (outputs_fw, outputs_bw), _ = tf.nn.bidirectional_dynamic_rnn(
                 cell_fw=cell_fw,
                 cell_bw=cell_bw,
@@ -125,18 +131,18 @@ class MTL2CharCNNWordBilstmModel():
 
     def add_fcn(self):
         with tf.variable_scope('task1_fcn'):
-            task1_W = tf.get_variable(name="task1_W", dtype=tf.float32, shape=[4 * self.cfg.lstm_model_hidden_size, self.task1_tag_size])
+            task1_W = tf.get_variable(name="task1_W", dtype=tf.float32, shape=[4 * self.lstm_size, self.task1_tag_size])
             task1_b = tf.get_variable(name="task1_b", dtype=tf.float32, shape=[self.task1_tag_size], initializer=tf.zeros_initializer())
             nsteps = tf.shape(self.task1_lstm_layer_output)[1]
-            output = tf.reshape(self.task1_lstm_layer_output, shape=[-1, 4 * self.cfg.lstm_model_hidden_size])
+            output = tf.reshape(self.task1_lstm_layer_output, shape=[-1, 4 * self.lstm_size])
             output = tf.matmul(output, task1_W) + task1_b
             self.task1_logits = tf.reshape(output, shape=[-1, nsteps, self.task1_tag_size])
 
         with tf.variable_scope('task2_fcn'):
-            task2_W = tf.get_variable(name="task2_W", dtype=tf.float32, shape=[4 * self.cfg.lstm_model_hidden_size, self.task2_tag_size])
+            task2_W = tf.get_variable(name="task2_W", dtype=tf.float32, shape=[4 * self.lstm_size, self.task2_tag_size])
             task2_b = tf.get_variable(name="task2_b", dtype=tf.float32, shape=[self.task2_tag_size], initializer=tf.zeros_initializer())
             nsteps = tf.shape(self.task2_lstm_layer_output)[1]
-            output = tf.reshape(self.task2_lstm_layer_output, shape=[-1, 4 * self.cfg.lstm_model_hidden_size])
+            output = tf.reshape(self.task2_lstm_layer_output, shape=[-1, 4 * self.lstm_size])
             output = tf.matmul(output, task2_W) + task2_b
             self.task2_logits = tf.reshape(output, shape=[-1, nsteps, self.task2_tag_size])
 
@@ -145,14 +151,14 @@ class MTL2CharCNNWordBilstmModel():
         with tf.variable_scope('task1_loss'):
             log_likelihood, self.task1_transition_param = tf.contrib.crf.crf_log_likelihood(self.task1_logits, self.labels, self.sentence_lenghts)
             self.task1_loss = tf.reduce_mean(-log_likelihood)
-            self.task1_train = tf.train.AdamOptimizer(learning_rate=self.cfg.lstm_model_rnn_lr).minimize(self.task1_loss)
+            self.task1_train = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(self.task1_loss)
             self.task1_trainloss = tf.summary.scalar('task1 train batch loss', self.task1_loss)
             self.task1_validationloss = tf.summary.scalar('task1 validation loss', self.task1_loss)
 
         with tf.variable_scope('task2_loss'):
             log_likelihood, self.task2_transition_param = tf.contrib.crf.crf_log_likelihood(self.task2_logits, self.labels, self.sentence_lenghts)
             self.task2_loss = tf.reduce_mean(-log_likelihood)
-            self.task2_train = tf.train.AdamOptimizer(learning_rate=self.cfg.lstm_model_rnn_lr).minimize(self.task2_loss)
+            self.task2_train = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(self.task2_loss)
             self.task2_trainloss = tf.summary.scalar('task2 train batch loss', self.task2_loss)
             self.task2_validationloss = tf.summary.scalar('task2 validation loss', self.task2_loss)
 
@@ -170,7 +176,7 @@ class MTL2CharCNNWordBilstmModel():
         self.sess = tf.Session(config=tf.ConfigProto(log_device_placement=False))
         self.sess.run(tf.global_variables_initializer())
         self.saver = tf.train.Saver(max_to_keep=10)
-        self.writer = tf.summary.FileWriter(self.cfg.dir_tensoboard_log, graph=tf.get_default_graph())
+        self.writer = tf.summary.FileWriter(self.tensorboard_log, graph=tf.get_default_graph())
 
     def create_feed_dict(self, word_seq, tag_seq, char_seq, word_embedding, start_index, end_index, dropout):
 
@@ -193,19 +199,20 @@ class MTL2CharCNNWordBilstmModel():
         }
         return feed_dict, current_batch_sen_len, current_batch_word_seq, current_batch_tag_seq
 
-    def train_graph(self, task1_train_word_seq, task1_train_tag_seq, task1_train_char_seq,
-                    task2_train_word_seq, task2_train_tag_seq, task2_train_char_seq,
-                    word_embedding, epoch_start=0):
+    def train_graph(self, main_task_train_word_seq, main_task_train_tag_seq, main_task_train_char_seq,
+                    aux_task_train_word_seq, aux_task_train_tag_seq, aux_task_train_char_seq,
+                    val_word_seq, val_tag_seq, val_char_seq,
+                    word_embedding, epoch_start, epoch_end, batch_size):
 
-        task1_num_sen = len(task1_train_word_seq)
-        task2_num_sen = len(task2_train_word_seq)
+        task1_num_sen = len(main_task_train_word_seq)
+        task2_num_sen = len(aux_task_train_word_seq)
 
         total_counter = 0
         batch_number_task1 = 0
         batch_number_task2 = 0
         end_index_task1 = 0
         end_index_task2 = 0
-        for epoch in range(epoch_start, self.cfg.lstm_model_max_epoch):
+        for epoch in range(epoch_start, epoch_end):
             batch_number_task1 = 0
             end_index_task1 = 0
             while end_index_task1 < task1_num_sen:
@@ -216,21 +223,21 @@ class MTL2CharCNNWordBilstmModel():
                     batch_number_task2 = 0
 
 
-                start_index_task1 = batch_number_task1 * self.cfg.lstm_model_batch_size
-                end_index_task1 = min([start_index_task1 + self.cfg.lstm_model_batch_size, task1_num_sen])
+                start_index_task1 = batch_number_task1 * batch_size
+                end_index_task1 = min([start_index_task1 + batch_size, task1_num_sen])
 
-                start_index_task2 = batch_number_task2 * self.cfg.lstm_model_batch_size
-                end_index_task2 = min([start_index_task2 + self.cfg.lstm_model_batch_size, task2_num_sen])
+                start_index_task2 = batch_number_task2 * batch_size
+                end_index_task2 = min([start_index_task2 + batch_size, task2_num_sen])
 
                 feed_dict, current_batch_len, current_batch_word_seq, current_batch_tag_seq = \
-                    self.create_feed_dict(task1_train_word_seq, task1_train_tag_seq, task1_train_char_seq, word_embedding, start_index_task1, end_index_task1, self.cfg.lstm_model_rnn_dropout)
+                    self.create_feed_dict(main_task_train_word_seq, main_task_train_tag_seq, main_task_train_char_seq, word_embedding, start_index_task1, end_index_task1, self.dropout)
                 [summary, _, loss] = self.sess.run([self.task1_trainloss, self.task1_train, self.task1_loss], feed_dict)
                 if batch_number_task1 % 50 == 0:
                     self.writer.add_summary(summary, total_counter)
                     self.logger.info("epoch: {} batch: {} task: 1 loss on train: {}".format(epoch, batch_number_task1, loss))
 
                 feed_dict, current_batch_len, current_batch_word_seq, current_batch_tag_seq = \
-                    self.create_feed_dict(task2_train_word_seq, task2_train_tag_seq, task2_train_char_seq, word_embedding, start_index_task2, end_index_task2, self.cfg.lstm_model_rnn_dropout)
+                    self.create_feed_dict(aux_task_train_word_seq, aux_task_train_tag_seq, aux_task_train_char_seq, word_embedding, start_index_task2, end_index_task2, self.dropout)
                 [summary, _, loss] = self.sess.run([self.task2_trainloss, self.task2_train, self.task2_loss], feed_dict)
                 if batch_number_task2 % 50 == 0:
                     self.writer.add_summary(summary, total_counter)
@@ -240,20 +247,20 @@ class MTL2CharCNNWordBilstmModel():
                 batch_number_task2 += 1
 
             # choice1: save model after each epoch and terminate after specified epoch number
-            save_path = self.saver.save(self.sess, "{}/bilstm_ner".format(self.cfg.dir_checkpoints),
+            save_path = self.saver.save(self.sess, "{}/bilstm_ner".format(self.chkpnts_path),
                                         global_step=int(epoch), write_meta_graph=False)
             self.logger.info("model is saved in: {}{}".format(save_path, ''.join([' '] * 100)))
 
             self.writer.add_summary(summary, epoch)
-            self.logger.info(
-                ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.epoch: {} loss on validation: {}".format(epoch, loss))
+            acc = self.evaluate_model(val_word_seq, val_tag_seq, val_char_seq, word_embedding, batch_size)
+            self.logger.info("epoch: {} accuracy on validation: {}".format(epoch, acc))
 
 
     def restore_graph(self):
-        self.saver.restore(self.sess, tf.train.latest_checkpoint(self.cfg.dir_checkpoints))
-        return tf.train.latest_checkpoint(self.cfg.dir_checkpoints)
+        self.saver.restore(self.sess, tf.train.latest_checkpoint(self.chkpnts_path))
+        return tf.train.latest_checkpoint(self.chkpnts_path)
 
-    def evaluate_model(self, test_word_seq, test_tag_seq, test_char_seq, word_embedding, task_number=1, id2word={}, id2tag={},
+    def evaluate_model(self, test_word_seq, test_tag_seq, test_char_seq, word_embedding, batch_size, task_number=1, id2word={}, id2tag={},
                        result_file_path=''):
         try:
             os.remove(result_file_path)
@@ -270,9 +277,9 @@ class MTL2CharCNNWordBilstmModel():
         end_index = 0
 
         while end_index < total_num_sentences:
-            start_index = batch_number * self.cfg.lstm_model_batch_size
+            start_index = batch_number * batch_size
             batch_number += 1
-            end_index = min([total_num_sentences, start_index + self.cfg.lstm_model_batch_size])
+            end_index = min([total_num_sentences, start_index + batch_size])
 
             feed_dict, current_batch_test_sen_len, current_batch_test_word_seq, current_batch_test_tag_seq = \
                 self.create_feed_dict(test_word_seq, test_tag_seq, test_char_seq, word_embedding, start_index,

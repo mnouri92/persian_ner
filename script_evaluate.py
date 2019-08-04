@@ -1,20 +1,26 @@
-from mtl_model import MTL2CharCNNWordBilstmModel
+from model.mtl_model import MTL2CharCNNWordBilstmModel
+from model.stl_model import STLCharCNNWordBilstmModel
 
-from charnomalizer import CharNormalizer
-from hazm import sent_tokenize, word_tokenize
+from common.charnomalizer import CharNormalizer
 
-from config import MTLConfig
-from utility import *
+from common.mtl_config import MTLConfig
+from common.config import Config
+from common.utility import *
 import os.path
 import pickle
 
 from os import listdir
 from os.path import isfile, join
 
-test_conll_data_directory_input = sys.argv[1]
-test_conll_data_directory_output = sys.argv[2]
+type = sys.argv[1] #stl/mtl
+main_task_directory_path = sys.argv[2]
+test_conll_data_directory_input = sys.argv[3]
+test_conll_data_directory_output = sys.argv[4]
 
-cfg = MTLConfig("files/")
+if type == "stl":
+    cfg = Config(main_task_directory_path)
+elif type == "mtl":
+    cfg = MTLConfig(main_task_directory_path, "")
 
 [vocab_id2tag, vocab_tag2id] = load_vocab(cfg.file_tag_vocab)
 [vocab_id2word, vocab_word2id] = load_vocab(cfg.file_word_vocab)
@@ -35,7 +41,16 @@ tag_size = max(vocab_id2tag, key=int) + 1
 char_size = max(vocab_id2char, key=int) + 1
 
 normalizer = CharNormalizer()
-mod = MTL2CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, cfg, char_size)
+
+if type == "stl":
+    mod = STLCharCNNWordBilstmModel(vocab_size, dim, tag_size, cfg.max_char, cfg.char_embedding_dimension,
+                                    cfg.wrd_lstm_hidden_size
+                                    , cfg.learning_rate, cfg.dir_tensoboard_log, cfg.dir_checkpoints, char_size)
+elif type == "mtl":
+    mod = MTL2CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, cfg.max_char, cfg.char_embedding_dimension,
+                                     cfg.wrd_lstm_hidden_size
+                                     , cfg.learning_rate, cfg.dir_tensoboard_log, cfg.dir_checkpoints, char_size)
+
 mod.build_graph()
 mod.restore_graph()
 vocab_id2word[-1] = "OOV"

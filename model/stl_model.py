@@ -1,9 +1,10 @@
 import tensorflow as tf
 import numpy as np
-from utility import setup_custom_logger
-from utility import remove_padding, pad_sequences
+from common.utility import setup_custom_logger
+from common.utility import remove_padding, pad_sequences
 import os
-from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
+from sklearn.metrics import confusion_matrix
+
 
 class STLCharCNNWordBilstmModel():
 
