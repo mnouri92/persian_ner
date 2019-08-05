@@ -11,10 +11,8 @@ class Config():
         self.file_full_word_embedding               = self.main_task_directory_path + "we.vec"
 
         self.dir_tensoboard_log                     = "log/"
-        if dir_model == "":
-            self.main_task_model_directory_path     = self.main_task_directory_path + "model/"
-        else:
-            self.main_task_model_directory_path     = dir_model + "/"
+
+        self.main_task_model_directory_path         = dir_model + "/"
 
         self.dir_checkpoints                        = self.main_task_model_directory_path
         self.file_trimmed_word_embedding            = self.main_task_model_directory_path + "word_embedding.trimmed"

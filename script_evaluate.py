@@ -13,14 +13,14 @@ from os import listdir
 from os.path import isfile, join
 
 type = sys.argv[1] #stl/mtl
-main_task_directory_path = sys.argv[2]
+model_path = sys.argv[2]
 test_conll_data_directory_input = sys.argv[3]
 test_conll_data_directory_output = sys.argv[4]
 
 if type == "stl":
-    cfg = Config(main_task_directory_path)
+    cfg = Config("", model_path)
 elif type == "mtl":
-    cfg = MTLConfig(main_task_directory_path, "")
+    cfg = MTLConfig("", "", model_path)
 
 [vocab_id2tag, vocab_tag2id] = load_vocab(cfg.file_tag_vocab)
 [vocab_id2word, vocab_word2id] = load_vocab(cfg.file_word_vocab)
