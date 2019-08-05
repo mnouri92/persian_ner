@@ -9,10 +9,6 @@ class Config():
         self.file_seq_main_task_train_data          = self.file_conll_main_task_train_data + ".seq"
 
         self.file_full_word_embedding               = self.main_task_directory_path + "we.vec"
-        self.file_trimmed_word_embedding            = self.main_task_model_directory_path + "word_embedding.trimmed"
-        self.file_word_vocab                        = self.main_task_model_directory_path + "vocab.words"
-        self.file_char_vocab                        = self.main_task_model_directory_path + "vocab.chars"
-        self.file_tag_vocab                         = self.main_task_model_directory_path + "vocab.tags"
 
         self.dir_tensoboard_log                     = "log/"
         if dir_model == "":
@@ -21,6 +17,10 @@ class Config():
             self.main_task_model_directory_path     = dir_model + "/"
 
         self.dir_checkpoints                        = self.main_task_model_directory_path
+        self.file_trimmed_word_embedding            = self.main_task_model_directory_path + "word_embedding.trimmed"
+        self.file_word_vocab                        = self.main_task_model_directory_path + "vocab.words"
+        self.file_char_vocab                        = self.main_task_model_directory_path + "vocab.chars"
+        self.file_tag_vocab                         = self.main_task_model_directory_path + "vocab.tags"
         self.word_embedding_dimension               = 300
         self.char_embedding_dimension               = 100
         self.batch_size                             = 16
