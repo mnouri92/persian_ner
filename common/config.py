@@ -1,9 +1,8 @@
 class Config():
 
-    def __init__(self, base_directory_path):
+    def __init__(self, base_directory_path, dir_model):
 
         self.main_task_directory_path               = base_directory_path + "/"
-        self.main_task_model_directory_path         = self.main_task_directory_path + "model/"
         self.main_task_data_directory_path          = base_directory_path + "data/"
 
         self.file_conll_main_task_train_data        = self.main_task_data_directory_path + "train.data"
@@ -16,8 +15,12 @@ class Config():
         self.file_tag_vocab                         = self.main_task_model_directory_path + "vocab.tags"
 
         self.dir_tensoboard_log                     = "log/"
-        self.dir_checkpoints                        = self.main_task_model_directory_path
+        if dir_model == "":
+            self.main_task_model_directory_path     = self.main_task_directory_path + "model/"
+        else:
+            self.main_task_model_directory_path     = dir_model + "/"
 
+        self.dir_checkpoints                        = self.main_task_model_directory_path
         self.word_embedding_dimension               = 300
         self.char_embedding_dimension               = 100
         self.batch_size                             = 16
