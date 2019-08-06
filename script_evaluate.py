@@ -17,7 +17,7 @@ file_full_word_embedding =sys.argv[3]
 test_conll_data_directory_input = sys.argv[4]
 test_conll_data_directory_output = sys.argv[5]
 
-cfg = Config("", model_path, file_full_word_embedding)
+cfg = Config("", [], model_path, file_full_word_embedding)
 
 [vocab_id2tag, vocab_tag2id] = load_vocab(cfg.file_tag_vocab)
 [vocab_id2word, vocab_word2id] = load_vocab(cfg.file_word_vocab)
