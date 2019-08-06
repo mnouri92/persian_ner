@@ -5,7 +5,7 @@ from model.stl_model import STLCharCNNWordBilstmModel
 from common.utility import *
 from common.mtl_config import MTLConfig
 from common.config import Config
-
+import os.path
 
 logger = setup_custom_logger(__name__)
 
@@ -69,19 +69,25 @@ logger.info("converting to conll format")
 convert_conll_to_numpy_array(cfg.file_conll_main_task_train_data, vocab_word2id, vocab_tag2id, vocab_char2id,
                              cfg.file_seq_main_task_train_data, cfg.max_char)
 if type == "mtl2":
-    convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[0], vocab_word2id, vocab_tag2id, vocab_char2id,
+    if answer == "no" or not os.path.isfile(cfg.file_seq_aux_task_train_data[0]):
+        convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[0], vocab_word2id, vocab_tag2id, vocab_char2id,
                                  cfg.file_seq_aux_task_train_data[0], cfg.max_char)
 elif type == "mtl3":
-    convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[0], vocab_word2id, vocab_tag2id, vocab_char2id,
+    if answer == "no" or not os.path.isfile(cfg.file_seq_aux_task_train_data[0]):
+        convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[0], vocab_word2id, vocab_tag2id, vocab_char2id,
                                  cfg.file_seq_aux_task_train_data[0], cfg.max_char)
-    convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[1], vocab_word2id, vocab_tag2id, vocab_char2id,
+    if answer == "no" or not os.path.isfile(cfg.file_seq_aux_task_train_data[1]):
+        convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[1], vocab_word2id, vocab_tag2id, vocab_char2id,
                                  cfg.file_seq_aux_task_train_data[1], cfg.max_char)
 elif type == "mtl4":
-    convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[0], vocab_word2id, vocab_tag2id, vocab_char2id,
+    if answer == "no" or not os.path.isfile(cfg.file_seq_aux_task_train_data[0]):
+        convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[0], vocab_word2id, vocab_tag2id, vocab_char2id,
                                  cfg.file_seq_aux_task_train_data[0], cfg.max_char)
-    convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[1], vocab_word2id, vocab_tag2id, vocab_char2id,
+    if answer == "no" or not os.path.isfile(cfg.file_seq_aux_task_train_data[1]):
+        convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[1], vocab_word2id, vocab_tag2id, vocab_char2id,
                                  cfg.file_seq_aux_task_train_data[1], cfg.max_char)
-    convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[2], vocab_word2id, vocab_tag2id, vocab_char2id,
+    if answer == "no" or not os.path.isfile(cfg.file_seq_aux_task_train_data[2]):
+        convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[2], vocab_word2id, vocab_tag2id, vocab_char2id,
                                  cfg.file_seq_aux_task_train_data[2], cfg.max_char)
 
 [vocab_size, dim] = np.shape(twe)
@@ -130,9 +136,12 @@ elif type == "mtl4":
 mod.build_graph()
 epoch_number = 0
 if answer != "no":
-    file_name = mod.restore_graph()
-    splitted_file_name = file_name.split("-")
-    epoch_number = int(splitted_file_name[-1])+1
+    try:
+        file_name = mod.restore_graph()
+        splitted_file_name = file_name.split("-")
+        epoch_number = int(splitted_file_name[-1])+1
+    except Exception as e:
+        logger.info("no valid checkpoint found. start to train from scratch...")
 
 
 if type == "stl":

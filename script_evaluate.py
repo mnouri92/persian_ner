@@ -1,4 +1,6 @@
 from model.mtl2_model import MTL2CharCNNWordBilstmModel
+from model.mtl3_model import MTL3CharCNNWordBilstmModel
+from model.mtl4_model import MTL4CharCNNWordBilstmModel
 from model.stl_model import STLCharCNNWordBilstmModel
 
 from common.charnomalizer import CharNormalizer
@@ -48,8 +50,16 @@ if type == "stl":
     mod = STLCharCNNWordBilstmModel(vocab_size, dim, tag_size, cfg.max_char, cfg.char_embedding_dimension,
                                     cfg.wrd_lstm_hidden_size
                                     , cfg.learning_rate, cfg.dir_tensoboard_log, cfg.dir_checkpoints, char_size)
-elif type == "mtl":
+elif type == "mtl2":
     mod = MTL2CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, cfg.max_char, cfg.char_embedding_dimension,
+                                     cfg.wrd_lstm_hidden_size
+                                     , cfg.learning_rate, cfg.dir_tensoboard_log, cfg.dir_checkpoints, char_size)
+elif type == "mtl3":
+    mod = MTL3CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, tag_size, cfg.max_char, cfg.char_embedding_dimension,
+                                     cfg.wrd_lstm_hidden_size
+                                     , cfg.learning_rate, cfg.dir_tensoboard_log, cfg.dir_checkpoints, char_size)
+elif type == "mtl4":
+    mod = MTL4CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, tag_size, tag_size, cfg.max_char, cfg.char_embedding_dimension,
                                      cfg.wrd_lstm_hidden_size
                                      , cfg.learning_rate, cfg.dir_tensoboard_log, cfg.dir_checkpoints, char_size)
 
