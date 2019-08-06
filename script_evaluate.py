@@ -2,10 +2,7 @@ from model.mtl2_model import MTL2CharCNNWordBilstmModel
 from model.mtl3_model import MTL3CharCNNWordBilstmModel
 from model.mtl4_model import MTL4CharCNNWordBilstmModel
 from model.stl_model import STLCharCNNWordBilstmModel
-
 from common.charnomalizer import CharNormalizer
-
-from common.mtl_config import MTLConfig
 from common.config import Config
 from common.utility import *
 import os.path
@@ -20,11 +17,7 @@ file_full_word_embedding =sys.argv[3]
 test_conll_data_directory_input = sys.argv[4]
 test_conll_data_directory_output = sys.argv[5]
 
-
-if type == "stl":
-    cfg = Config("", model_path, file_full_word_embedding)
-else:
-    cfg = MTLConfig("", [], model_path, file_full_word_embedding)
+cfg = Config("", model_path, file_full_word_embedding)
 
 [vocab_id2tag, vocab_tag2id] = load_vocab(cfg.file_tag_vocab)
 [vocab_id2word, vocab_word2id] = load_vocab(cfg.file_word_vocab)
