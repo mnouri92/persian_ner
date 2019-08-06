@@ -1,4 +1,4 @@
-from model.mtl_model import MTL2CharCNNWordBilstmModel
+from model.mtl2_model import MTL2CharCNNWordBilstmModel
 from model.stl_model import STLCharCNNWordBilstmModel
 
 from common.charnomalizer import CharNormalizer

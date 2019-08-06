@@ -1,4 +1,6 @@
-from model.mtl_model import MTL2CharCNNWordBilstmModel
+from model.mtl2_model import MTL2CharCNNWordBilstmModel
+from model.mtl3_model import MTL3CharCNNWordBilstmModel
+from model.mtl4_model import MTL4CharCNNWordBilstmModel
 from model.stl_model import STLCharCNNWordBilstmModel
 from common.utility import *
 from common.mtl_config import MTLConfig
@@ -11,15 +13,33 @@ type = sys.argv[1]
 model_path = sys.argv[2]
 file_full_word_embedding =sys.argv[3]
 main_task_directory_path = sys.argv[4]
-if type == "mtl":
-    aux_task_directory_path = sys.argv[5]
+if type == "mtl2":
+    aux_task1_directory_path = sys.argv[5]
+elif type == "mtl3":
+    aux_task1_directory_path = sys.argv[5]
+    aux_task2_directory_path = sys.argv[6]
+elif type == "mtl4":
+    aux_task1_directory_path = sys.argv[5]
+    aux_task2_directory_path = sys.argv[6]
+    aux_task3_directory_path = sys.argv[7]
 
 if type == "stl":
     cfg = Config(main_task_directory_path, model_path, file_full_word_embedding)
     all_files = [cfg.file_conll_main_task_train_data]
-elif type == "mtl":
-    cfg = MTLConfig(main_task_directory_path, aux_task_directory_path, model_path, file_full_word_embedding)
-    all_files = [cfg.file_conll_main_task_train_data, cfg.file_conll_aux_task_train_data]
+elif type == "mtl2":
+    cfg = MTLConfig(main_task_directory_path, [aux_task1_directory_path], model_path, file_full_word_embedding)
+    all_files = cfg.file_conll_aux_task_train_data
+    all_files.append(cfg.file_conll_main_task_train_data)
+elif type == "mtl3":
+    cfg = MTLConfig(main_task_directory_path,
+                    [aux_task1_directory_path, aux_task2_directory_path, aux_task3_directory_path], model_path,
+                    file_full_word_embedding)
+    all_files = cfg.file_conll_aux_task_train_data
+    all_files.append(cfg.file_conll_main_task_train_data)
+elif type == "mtl4":
+    cfg = MTLConfig(main_task_directory_path, [aux_task1_directory_path, aux_task2_directory_path, aux_task3_directory_path, aux_task4_directory_path], model_path, file_full_word_embedding)
+    all_files = cfg.file_conll_aux_task_train_data
+    all_files.append(cfg.file_conll_main_task_train_data)
 
 answer = input("continue from previous learned models (probabely to improve them)?(yes/no)")
 if answer == "no":
@@ -47,9 +67,21 @@ twe = load_trimmed_word_embeddings(cfg.file_trimmed_word_embedding)
 logger.info("converting to conll format")
 convert_conll_to_numpy_array(cfg.file_conll_main_task_train_data, vocab_word2id, vocab_tag2id, vocab_char2id,
                              cfg.file_seq_main_task_train_data, cfg.max_char)
-if type == "mtl":
-    convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data, vocab_word2id, vocab_tag2id, vocab_char2id,
-                                 cfg.file_seq_aux_task_train_data, cfg.max_char)
+if type == "mtl2":
+    convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[0], vocab_word2id, vocab_tag2id, vocab_char2id,
+                                 cfg.file_seq_aux_task_train_data[0], cfg.max_char)
+elif type == "mtl3":
+    convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[0], vocab_word2id, vocab_tag2id, vocab_char2id,
+                                 cfg.file_seq_aux_task_train_data[0], cfg.max_char)
+    convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[1], vocab_word2id, vocab_tag2id, vocab_char2id,
+                                 cfg.file_seq_aux_task_train_data[1], cfg.max_char)
+elif type == "mtl4":
+    convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[0], vocab_word2id, vocab_tag2id, vocab_char2id,
+                                 cfg.file_seq_aux_task_train_data[0], cfg.max_char)
+    convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[1], vocab_word2id, vocab_tag2id, vocab_char2id,
+                                 cfg.file_seq_aux_task_train_data[1], cfg.max_char)
+    convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[2], vocab_word2id, vocab_tag2id, vocab_char2id,
+                                 cfg.file_seq_aux_task_train_data[2], cfg.max_char)
 
 [vocab_size, dim] = np.shape(twe)
 tag_size = max(vocab_id2tag, key=int) + 1
@@ -57,8 +89,15 @@ char_size = max(vocab_id2char, key=int) + 1
 
 logger.info("loading data again.")
 [main_task_all_words, main_task_all_tags, main_task_all_chars] = load_sequence_data(cfg.file_seq_main_task_train_data)
-if type == "mtl":
-    [aux_task_train_words, aux_task_train_tags, aux_task_train_chars] = load_sequence_data(cfg.file_seq_aux_task_train_data)
+if type == "mtl2":
+    [aux_task1_train_words, aux_task1_train_tags, aux_task1_train_chars] = load_sequence_data(cfg.file_seq_aux_task_train_data[0])
+elif type == "mtl3":
+    [aux_task1_train_words, aux_task1_train_tags, aux_task1_train_chars] = load_sequence_data(cfg.file_seq_aux_task_train_data[0])
+    [aux_task2_train_words, aux_task2_train_tags, aux_task2_train_chars] = load_sequence_data(cfg.file_seq_aux_task_train_data[1])
+elif type == "mtl4":
+    [aux_task1_train_words, aux_task1_train_tags, aux_task1_train_chars] = load_sequence_data(cfg.file_seq_aux_task_train_data[0])
+    [aux_task2_train_words, aux_task2_train_tags, aux_task2_train_chars] = load_sequence_data(cfg.file_seq_aux_task_train_data[1])
+    [aux_task3_train_words, aux_task3_train_tags, aux_task3_train_chars] = load_sequence_data(cfg.file_seq_aux_task_train_data[2])
 
 num_data = len(main_task_all_words)
 num_train = int(0.95*num_data)
@@ -74,8 +113,16 @@ if type == "stl":
     mod = STLCharCNNWordBilstmModel(vocab_size, dim, tag_size, cfg.max_char, cfg.char_embedding_dimension,
                                     cfg.wrd_lstm_hidden_size
                                     , cfg.learning_rate, cfg.dir_tensoboard_log, cfg.dir_checkpoints, char_size)
-elif type == "mtl":
+elif type == "mtl2":
     mod = MTL2CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, cfg.max_char, cfg.char_embedding_dimension,
+                                     cfg.wrd_lstm_hidden_size
+                                     , cfg.learning_rate, cfg.dir_tensoboard_log, cfg.dir_checkpoints, char_size)
+elif type == "mtl3":
+    mod = MTL3CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, tag_size, cfg.max_char, cfg.char_embedding_dimension,
+                                     cfg.wrd_lstm_hidden_size
+                                     , cfg.learning_rate, cfg.dir_tensoboard_log, cfg.dir_checkpoints, char_size)
+elif type == "mtl4":
+    mod = MTL4CharCNNWordBilstmModel(vocab_size, dim, tag_size, tag_size, tag_size, tag_size, cfg.max_char, cfg.char_embedding_dimension,
                                      cfg.wrd_lstm_hidden_size
                                      , cfg.learning_rate, cfg.dir_tensoboard_log, cfg.dir_checkpoints, char_size)
 
@@ -91,10 +138,24 @@ if type == "stl":
     mod.train_graph(train_word_seq=main_task_train_words, train_tag_seq=main_task_train_tags, train_char_seq=main_task_train_chars,
                     val_word_seq=main_task_val_words, val_tag_seq=main_task_val_tags, val_char_seq=main_task_val_chars
                     , word_embedding=twe, epoch_start=epoch_number, epoch_end=100, batch_size=cfg.batch_size)
-elif type == "mtl":
-    mod.train_graph(main_task_train_word_seq=main_task_train_words, main_task_train_tag_seq=main_task_train_tags,
-                    main_task_train_char_seq=main_task_train_chars
-                    , aux_task_train_word_seq=aux_task_train_words, aux_task_train_tag_seq=aux_task_train_tags,
-                    aux_task_train_char_seq=aux_task_train_chars
+elif type == "mtl2":
+    mod.train_graph(main_task_train_word_seq=main_task_train_words, main_task_train_tag_seq=main_task_train_tags
+                    , main_task_train_char_seq=main_task_train_chars
+                    , aux_task1_train_word_seq=aux_task1_train_words, aux_task1_train_tag_seq=aux_task1_train_tags, aux_task1_train_char_seq=aux_task1_train_chars
+                    , val_word_seq=main_task_val_words, val_tag_seq=main_task_val_tags, val_char_seq=main_task_val_chars
+                    , word_embedding=twe, epoch_start=epoch_number, epoch_end=100, batch_size=cfg.batch_size)
+elif type == "mtl3":
+    mod.train_graph(main_task_train_word_seq=main_task_train_words, main_task_train_tag_seq=main_task_train_tags
+                    , main_task_train_char_seq=main_task_train_chars
+                    , aux_task1_train_word_seq=aux_task1_train_words, aux_task1_train_tag_seq=aux_task1_train_tags, aux_task1_train_char_seq=aux_task1_train_chars
+                    , aux_task2_train_word_seq=aux_task2_train_words, aux_task2_train_tag_seq=aux_task2_train_tags, aux_task2_train_char_seq=aux_task2_train_chars
+                    , val_word_seq=main_task_val_words, val_tag_seq=main_task_val_tags, val_char_seq=main_task_val_chars
+                    , word_embedding=twe, epoch_start=epoch_number, epoch_end=100, batch_size=cfg.batch_size)
+elif type == "mtl4":
+    mod.train_graph(main_task_train_word_seq=main_task_train_words, main_task_train_tag_seq=main_task_train_tags
+                    , main_task_train_char_seq=main_task_train_chars
+                    , aux_task1_train_word_seq=aux_task1_train_words, aux_task1_train_tag_seq=aux_task1_train_tags, aux_task1_train_char_seq=aux_task1_train_chars
+                    , aux_task2_train_word_seq=aux_task2_train_words, aux_task2_train_tag_seq=aux_task2_train_tags, aux_task2_train_char_seq=aux_task2_train_chars
+                    , aux_task3_train_word_seq=aux_task3_train_words, aux_task3_train_tag_seq=aux_task3_train_tags, aux_task3_train_char_seq=aux_task3_train_chars
                     , val_word_seq=main_task_val_words, val_tag_seq=main_task_val_tags, val_char_seq=main_task_val_chars
                     , word_embedding=twe, epoch_start=epoch_number, epoch_end=100, batch_size=cfg.batch_size)
