@@ -9,15 +9,16 @@ logger = setup_custom_logger(__name__)
 
 type = sys.argv[1]
 model_path = sys.argv[2]
-main_task_directory_path = sys.argv[3]
+file_full_word_embedding =sys.argv[3]
+main_task_directory_path = sys.argv[4]
 if type == "mtl":
-    aux_task_directory_path = sys.argv[4]
+    aux_task_directory_path = sys.argv[5]
 
 if type == "stl":
-    cfg = Config(main_task_directory_path, model_path)
+    cfg = Config(main_task_directory_path, model_path, file_full_word_embedding)
     all_files = [cfg.file_conll_main_task_train_data]
 elif type == "mtl":
-    cfg = MTLConfig(main_task_directory_path, aux_task_directory_path, model_path)
+    cfg = MTLConfig(main_task_directory_path, aux_task_directory_path, model_path, file_full_word_embedding)
     all_files = [cfg.file_conll_main_task_train_data, cfg.file_conll_aux_task_train_data]
 
 answer = input("continue from previous learned models (probabely to improve them)?(yes/no)")
