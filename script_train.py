@@ -3,7 +3,6 @@ from model.mtl3_model import MTL3CharCNNWordBilstmModel
 from model.mtl4_model import MTL4CharCNNWordBilstmModel
 from model.stl_model import STLCharCNNWordBilstmModel
 from common.utility import *
-from common.mtl_config import MTLConfig
 from common.config import Config
 import os.path
 
@@ -24,21 +23,21 @@ elif type == "mtl4":
     aux_task3_directory_path = sys.argv[7]
 
 if type == "stl":
-    cfg = Config(main_task_directory_path, model_path, file_full_word_embedding)
+    cfg = Config(main_task_directory_path, [], model_path, file_full_word_embedding)
     all_files = [cfg.file_conll_main_task_train_data]
 elif type == "mtl2":
-    cfg = MTLConfig(main_task_directory_path,
+    cfg = Config(main_task_directory_path,
                     [aux_task1_directory_path], model_path, file_full_word_embedding)
     all_files = cfg.file_conll_aux_task_train_data
     all_files.append(cfg.file_conll_main_task_train_data)
 elif type == "mtl3":
-    cfg = MTLConfig(main_task_directory_path,
+    cfg = Config(main_task_directory_path,
                     [aux_task1_directory_path, aux_task2_directory_path], model_path,
                     file_full_word_embedding)
     all_files = cfg.file_conll_aux_task_train_data
     all_files.append(cfg.file_conll_main_task_train_data)
 elif type == "mtl4":
-    cfg = MTLConfig(main_task_directory_path, [aux_task1_directory_path, aux_task2_directory_path, aux_task3_directory_path], model_path, file_full_word_embedding)
+    cfg = Config(main_task_directory_path, [aux_task1_directory_path, aux_task2_directory_path, aux_task3_directory_path], model_path, file_full_word_embedding)
     all_files = cfg.file_conll_aux_task_train_data
     all_files.append(cfg.file_conll_main_task_train_data)
 
