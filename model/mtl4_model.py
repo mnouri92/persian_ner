@@ -133,10 +133,10 @@ class MTL4CharCNNWordBilstmModel(Model):
 
         with tf.variable_scope('task1_loss'):
             log_likelihood, self.task1_transition_param = tf.contrib.crf.crf_log_likelihood(self.task1_logits, self.labels, self.sentence_lenghts)
-            self.task1_loss = tf.reduce_mean(-log_likelihood)
-            self.task1_train = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(self.task1_loss)
-            self.task1_trainloss = tf.summary.scalar('task1 train batch loss', self.task1_loss)
-            self.task1_validationloss = tf.summary.scalar('task1 validation loss', self.task1_loss)
+            self.loss = tf.reduce_mean(-log_likelihood)
+            self.task1_train = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(self.loss)
+            self.task1_trainloss = tf.summary.scalar('task1 train batch loss', self.loss)
+            self.task1_validationloss = tf.summary.scalar('task1 validation loss', self.loss)
 
         with tf.variable_scope('task2_loss'):
             log_likelihood, self.task2_transition_param = tf.contrib.crf.crf_log_likelihood(self.task2_logits, self.labels, self.sentence_lenghts)
