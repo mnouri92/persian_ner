@@ -27,17 +27,18 @@ if type == "stl":
     cfg = Config(main_task_directory_path, model_path, file_full_word_embedding)
     all_files = [cfg.file_conll_main_task_train_data]
 elif type == "mtl2":
-    cfg = MTLConfig(main_task_directory_path, [aux_task1_directory_path], model_path, file_full_word_embedding)
+    cfg = MTLConfig(main_task_directory_path,
+                    [aux_task1_directory_path], model_path, file_full_word_embedding)
     all_files = cfg.file_conll_aux_task_train_data
     all_files.append(cfg.file_conll_main_task_train_data)
 elif type == "mtl3":
     cfg = MTLConfig(main_task_directory_path,
-                    [aux_task1_directory_path, aux_task2_directory_path, aux_task3_directory_path], model_path,
+                    [aux_task1_directory_path, aux_task2_directory_path], model_path,
                     file_full_word_embedding)
     all_files = cfg.file_conll_aux_task_train_data
     all_files.append(cfg.file_conll_main_task_train_data)
 elif type == "mtl4":
-    cfg = MTLConfig(main_task_directory_path, [aux_task1_directory_path, aux_task2_directory_path, aux_task3_directory_path, aux_task4_directory_path], model_path, file_full_word_embedding)
+    cfg = MTLConfig(main_task_directory_path, [aux_task1_directory_path, aux_task2_directory_path, aux_task3_directory_path], model_path, file_full_word_embedding)
     all_files = cfg.file_conll_aux_task_train_data
     all_files.append(cfg.file_conll_main_task_train_data)
 
