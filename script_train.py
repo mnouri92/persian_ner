@@ -69,24 +69,24 @@ logger.info("converting to conll format")
 convert_conll_to_numpy_array(cfg.file_conll_main_task_train_data, vocab_word2id, vocab_tag2id, vocab_char2id,
                              cfg.file_seq_main_task_train_data, cfg.max_char)
 if type == "mtl2":
-    if answer == "no" or not os.path.isfile(cfg.file_seq_aux_task_train_data[0]):
+    if answer == "no" or not os.path.isfile(cfg.file_seq_aux_task_train_data[0] + ".npz"):
         convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[0], vocab_word2id, vocab_tag2id, vocab_char2id,
                                  cfg.file_seq_aux_task_train_data[0], cfg.max_char)
 elif type == "mtl3":
-    if answer == "no" or not os.path.isfile(cfg.file_seq_aux_task_train_data[0]):
+    if answer == "no" or not os.path.isfile(cfg.file_seq_aux_task_train_data[0] + ".npz"):
         convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[0], vocab_word2id, vocab_tag2id, vocab_char2id,
                                  cfg.file_seq_aux_task_train_data[0], cfg.max_char)
-    if answer == "no" or not os.path.isfile(cfg.file_seq_aux_task_train_data[1]):
+    if answer == "no" or not os.path.isfile(cfg.file_seq_aux_task_train_data[1] + ".npz"):
         convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[1], vocab_word2id, vocab_tag2id, vocab_char2id,
                                  cfg.file_seq_aux_task_train_data[1], cfg.max_char)
 elif type == "mtl4":
-    if answer == "no" or not os.path.isfile(cfg.file_seq_aux_task_train_data[0]):
+    if answer == "no" or not os.path.isfile(cfg.file_seq_aux_task_train_data[0] + ".npz"):
         convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[0], vocab_word2id, vocab_tag2id, vocab_char2id,
                                  cfg.file_seq_aux_task_train_data[0], cfg.max_char)
-    if answer == "no" or not os.path.isfile(cfg.file_seq_aux_task_train_data[1]):
+    if answer == "no" or not os.path.isfile(cfg.file_seq_aux_task_train_data[1] + ".npz"):
         convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[1], vocab_word2id, vocab_tag2id, vocab_char2id,
                                  cfg.file_seq_aux_task_train_data[1], cfg.max_char)
-    if answer == "no" or not os.path.isfile(cfg.file_seq_aux_task_train_data[2]):
+    if answer == "no" or not os.path.isfile(cfg.file_seq_aux_task_train_data[2] + ".npz"):
         convert_conll_to_numpy_array(cfg.file_conll_aux_task_train_data[2], vocab_word2id, vocab_tag2id, vocab_char2id,
                                  cfg.file_seq_aux_task_train_data[2], cfg.max_char)
 
