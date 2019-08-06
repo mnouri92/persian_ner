@@ -21,8 +21,8 @@ test_conll_data_directory_output = sys.argv[5]
 
 if type == "stl":
     cfg = Config("", model_path, file_full_word_embedding)
-elif type == "mtl":
-    cfg = MTLConfig("", "", model_path, file_full_word_embedding)
+else:
+    cfg = MTLConfig("", [], model_path, file_full_word_embedding)
 
 [vocab_id2tag, vocab_tag2id] = load_vocab(cfg.file_tag_vocab)
 [vocab_id2word, vocab_word2id] = load_vocab(cfg.file_word_vocab)

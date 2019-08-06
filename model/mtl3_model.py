@@ -193,7 +193,7 @@ class MTL3CharCNNWordBilstmModel(Model):
                 [summary, _, loss] = self.sess.run([self.task3_trainloss, self.task3_train, self.task3_loss], feed_dict)
                 if batch_number_task3 % 50 == 0:
                     self.writer.add_summary(summary, total_counter)
-                    self.logger.info("epoch: {} batch: {} task: 2 loss on train: {}".format(epoch, batch_number_task3, loss))
+                    self.logger.info("epoch: {} batch: {} task: 3 loss on train: {}".format(epoch, batch_number_task3, loss))
 
                 batch_number_task1 += 1
                 batch_number_task2 += 1
