@@ -49,6 +49,10 @@ class Model():
         self.embedded_words = tf.concat([self.embedded_words, concat_pooled], axis=-1)                                      #shape=[batch_size, max_sentence_length_in_batch, num_filter*len(filter_sizes)+word_emb_dim]
         self.embedded_words = tf.nn.dropout(self.embedded_words, self.dropout)                                              #shape=[batch_size, max_sentence_length_in_batch, num_filter*len(filter_sizes)+word_emb_dim]
 
+    def add_pred_op(self):
+
+        self.labels_pred = tf.contrib.crf.crf_decode(self.task1_logits, self.task1_transition_param, self.sentence_lenghts)[0]
+
     def initialize_session(self):
         """Defines self.sess and initialize the variables"""
         self.logger.info("Initializing tf session")

@@ -95,13 +95,6 @@ class MTL2CharCNNWordBilstmModel(Model):
             self.task2_trainloss = tf.summary.scalar('task2 train batch loss', self.task2_loss)
             self.task2_validationloss = tf.summary.scalar('task2 validation loss', self.task2_loss)
 
-    def add_pred_op(self):
-
-        self.task1_labels_pred = tf.contrib.crf.crf_decode(self.task1_logits, self.task1_transition_param, self.sentence_lenghts)[0]
-        print(self.task1_labels_pred)
-
-        self.task2_labels_pred = tf.contrib.crf.crf_decode(self.task2_logits, self.task2_transition_param, self.sentence_lenghts)[0]
-        print(self.task2_labels_pred)
 
     def train_graph(self, main_task_train_word_seq, main_task_train_tag_seq, main_task_train_char_seq,
                     aux_task1_train_word_seq, aux_task1_train_tag_seq, aux_task1_train_char_seq,
