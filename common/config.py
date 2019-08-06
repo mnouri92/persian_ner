@@ -1,6 +1,6 @@
 class Config():
 
-    def __init__(self, base_directory_path, dir_model):
+    def __init__(self, base_directory_path, dir_model, file_full_word_embedding):
 
         self.main_task_directory_path               = base_directory_path + "/"
         self.main_task_data_directory_path          = base_directory_path + "data/"
@@ -8,7 +8,7 @@ class Config():
         self.file_conll_main_task_train_data        = self.main_task_data_directory_path + "train.data"
         self.file_seq_main_task_train_data          = self.file_conll_main_task_train_data + ".seq"
 
-        self.file_full_word_embedding               = self.main_task_directory_path + "we.vec"
+        self.file_full_word_embedding               = file_full_word_embedding
 
         self.dir_tensoboard_log                     = "log/"
 

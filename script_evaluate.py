@@ -14,13 +14,15 @@ from os.path import isfile, join
 
 type = sys.argv[1] #stl/mtl
 model_path = sys.argv[2]
-test_conll_data_directory_input = sys.argv[3]
-test_conll_data_directory_output = sys.argv[4]
+file_full_word_embedding =sys.argv[3]
+test_conll_data_directory_input = sys.argv[4]
+test_conll_data_directory_output = sys.argv[5]
+
 
 if type == "stl":
-    cfg = Config("", model_path)
+    cfg = Config("", model_path, file_full_word_embedding)
 elif type == "mtl":
-    cfg = MTLConfig("", "", model_path)
+    cfg = MTLConfig("", "", model_path, file_full_word_embedding)
 
 [vocab_id2tag, vocab_tag2id] = load_vocab(cfg.file_tag_vocab)
 [vocab_id2word, vocab_word2id] = load_vocab(cfg.file_word_vocab)
