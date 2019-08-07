@@ -3,6 +3,7 @@ import numpy as np
 from common.utility import remove_padding, pad_sequences
 import os
 from sklearn.metrics import confusion_matrix
+import os.path
 
 class Model():
 
@@ -83,8 +84,9 @@ class Model():
         return feed_dict, current_batch_sen_len, current_batch_word_seq, current_batch_tag_seq
 
     def restore_graph(self):
-        self.saver.restore(self.sess, tf.train.latest_checkpoint(self.chkpnts_path))
-        return tf.train.latest_checkpoint(self.chkpnts_path)
+        file_name = os.path.normpath(tf.train.latest_checkpoint(self.chkpnts_path))
+        self.saver.restore(self.sess, file_name)
+        return file_name
 
     def evaluate_model(self, test_word_seq, test_tag_seq, test_char_seq, word_embedding, batch_size, id2word={}, id2tag={},
                        result_file_path=''):
