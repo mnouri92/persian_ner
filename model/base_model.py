@@ -85,6 +85,7 @@ class Model():
 
     def restore_graph(self):
         file_name = os.path.normpath(tf.train.latest_checkpoint(self.chkpnts_path))
+        print(file_name)
         self.saver.restore(self.sess, file_name)
         return file_name
 
