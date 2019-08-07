@@ -1,6 +1,7 @@
 import tensorflow as tf
 from common.utility import setup_custom_logger
 from model.base_model import Model
+import os
 
 class MTL2CharCNNWordBilstmModel(Model):
 
@@ -143,8 +144,7 @@ class MTL2CharCNNWordBilstmModel(Model):
                 batch_number_task1 += 1
                 batch_number_task2 += 1
 
-            # choice1: save model after each epoch and terminate after specified epoch number
-            save_path = self.saver.save(self.sess, "{}/bilstm_ner".format(self.chkpnts_path),
+            save_path = self.saver.save(self.sess, os.path.join(self.chkpnts_path, "mtl2_ner"),
                                         global_step=int(epoch), write_meta_graph=False)
             self.logger.info("model is saved in: {}{}".format(save_path, ''.join([' '] * 100)))
 

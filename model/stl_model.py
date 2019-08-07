@@ -91,7 +91,7 @@ class STLCharCNNWordBilstmModel(Model):
 
                 batch_number += 1
 
-            save_path = self.saver.save(self.sess, "{}/stl_ner".format(self.chkpnts_path),
+            save_path = self.saver.save(self.sess, os.path.join(self.chkpnts_path, "stl_ner"),
                                         global_step=int(epoch), write_meta_graph=False)
             self.logger.info("model is saved in: {}{}".format(save_path, ''.join([' '] * 100)))
 
