@@ -32,5 +32,5 @@ then
     cp "$1" "files/mtl/ner_bijankhan/we.vec"
 fi
 
-python script_train.py "mtl" files/mtl/ner_bijankhan/ files/mtl/ner_armanperso/
+python script_train.py mtl2 files/mtl/ner_bijankhan/model files/mtl/ner_bijankhan/we.vec files/mtl/ner_bijankhan files/mtl/ner_armanperso
 
