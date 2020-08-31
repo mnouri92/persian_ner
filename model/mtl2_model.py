@@ -112,6 +112,8 @@ class MTL2CharCNNWordBilstmModel(Model):
         end_index_task2 = 0
         best_val_acc = 0
 
+        tf.saved_model.save(self, os.path.join(self.chkpnts_path, "final"))
+
         for epoch in range(epoch_start, epoch_end):
             batch_number_task1 = 0
             end_index_task1 = 0
