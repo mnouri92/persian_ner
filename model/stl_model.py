@@ -71,6 +71,8 @@ class STLCharCNNWordBilstmModel(Model):
         total_counter = 0
         batch_number = 0
         end_index = 0
+
+        best_val_acc = 0
         for epoch in range(epoch_start, epoch_end):
             batch_number = 0
             end_index = 0
@@ -98,6 +100,11 @@ class STLCharCNNWordBilstmModel(Model):
             self.writer.add_summary(summary, epoch)
 
             acc = self.evaluate_model(val_word_seq, val_tag_seq, val_char_seq, word_embedding, batch_size)
+
+            if acc > best_val_acc:
+                tf.saved_model.save(self, os.path.join(self.chkpnts_path, "final"))
+                best_val_acc = acc
+
             self.logger.info("epoch: {} accuracy on validation: {}".format(epoch, acc))
 
 
