@@ -11,21 +11,12 @@ import tensorflow as tf
 
 type = sys.argv[1] #stl/mtl
 model_path = sys.argv[2]
-file_full_word_embedding =sys.argv[3]
 
-cfg = Config("", [], model_path, file_full_word_embedding)
+cfg = Config("", [], model_path, "")
 
 [vocab_id2tag, vocab_tag2id] = load_vocab(cfg.file_tag_vocab)
 [vocab_id2word, vocab_word2id] = load_vocab(cfg.file_word_vocab)
 [vocab_id2char, vocab_char2id] = load_vocab(cfg.file_char_vocab)
-
-if not path.isfile(cfg.file_full_word_embedding + '.pickle'):
-    word_embedding, avg_vector = get_full_word_embeddings(cfg.file_full_word_embedding, cfg.word_embedding_dimension)
-    with open(cfg.file_full_word_embedding + '.pickle', 'wb') as handle:
-        pickle.dump([word_embedding, avg_vector], handle, protocol=pickle.HIGHEST_PROTOCOL)
-else:
-    with open(cfg.file_full_word_embedding + '.pickle', 'rb') as f:
-        [word_embedding, avg_vector] = pickle.load(f)
 
 twe = load_trimmed_word_embeddings(cfg.file_trimmed_word_embedding)
 [vocab_size, dim] = np.shape(twe)
