@@ -5,7 +5,7 @@ import os
 from sklearn.metrics import confusion_matrix
 import os.path
 
-class Model(tf.keras.Model):
+class Model():
 
     def build_graph(self):
         self.add_placeholders()

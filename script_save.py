@@ -44,4 +44,4 @@ elif type == "mtl4":
 mod.build_graph()
 mod.restore_graph()
 
-tf.saved_model.save(mod, "final")
+tf.saved_model.save(mod.sess, "final")
