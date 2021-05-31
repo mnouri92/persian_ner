@@ -2,9 +2,9 @@
 
 # Introduction
 
-**Named Entity Recognition (NER)** is one of the important tasks in the natural language processing, which are developed with the aim of recognize named entities within diffrent texts and classify to categories such as Person, Organization, Location, etc. .
+**Named Entity Recognition (NER)** is one of the important tasks in the natural language processing, which are developed with the aim of recognize named entities within different texts and classify to categories such as Person, Organization, Location, etc. .
 
-One of the related challenges, is the development of NLP algorithms such as NER for languages that do not have a rich and diverse dataset. Therefore, in the proposed method, multi-task learning technique has been used to overcome this issue and provide more accurate results about **NER**, **Part-of-speech(POS)** and **Ezafe** in persian language.
+One of the related challenges, is the develop of NLP algorithms such as NER for languages that do not have a rich and diverse dataset. Therefore, in the proposed method, multi-task learning technique has been used to overcome this issue and provide more accurate results about **NER**, **Part-of-speech(POS)** and **Ezafe** in persian language.
 
 
 # Usage
@@ -20,7 +20,7 @@ in first step you must clone the project on your system as follow :
 The project is developed by **Python** programming language and using some important packages related to Machine-Learning programming such as TensorFlow. 
 > if you haven't installed Python on your system you can download and install from [Python.org](https://www.python.org/downloads/)
 
-therefore after cloning the project, move to project's root directory and install requirements by :
+Therefore after cloning the project, move to project's root directory and install requirements by :
 
 ``` python -m pip install -r requirements.txt```
 
@@ -28,7 +28,7 @@ therefore after cloning the project, move to project's root directory and instal
 Now is turn to train the models
 > For train the models you need training data related to each of tasks and word embedding for Persian vocabularies that all of these will be downloaded automatically by running the train_mtl.sh file
 
-For train the model all of that you have to do is just specify the chosen model to train (mtl2, mtl3 or mtl4), main task and auxiliary task(s) and then run the following command in terminal : 
+For train the model all that you have to do is just specify the chosen model to train (mtl2, mtl3 or mtl4), main task and auxiliary task(s) and then run the following command in terminal : 
 ``` ./train_mtl.sh <chosen_type> <main_task_path> <auxiliary_task_path> <second_aux_path_if_type_is_mtl3> <third_aux_path_if_type_is_mtl4>```
 
 > type can be chosen from :
