@@ -13,7 +13,7 @@ Project running tips have been explained step-by-step that you can follow them t
 ## Step-1
 in first step you must clone the project on your system as follow :
 
-'''git clone https://github.com/mnouri92/persian_ner.git'''
+```git clone https://github.com/mnouri92/persian_ner.git```
 > if you dont have the git on your system you can download and install that from [Git](https://git-scm.com/downloads)
 
 ## Step-2
