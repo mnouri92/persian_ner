@@ -37,6 +37,8 @@ For train the model all that you have to do is just specify the chosen model to 
 > each of paths can be chosen from :
 > [ files/mtl/ner_bijankhan , files/mtl/ner_armanperso , files/mtl/gen , files/mtl/pos ]
 
+After that model training was ended you can evaluate the model by run the bellow code in terminal :
+''' ./evaluate_mtl.sh <model_type> <trained_model_path> <input_data_path> <output_data_path> '''
 
 ## Step-4
 After running the code for each of tasks , the trained model will be saved in **./model** sub-directory related to chosen task as main.
