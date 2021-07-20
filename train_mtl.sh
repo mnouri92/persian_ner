@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$#" -ne 1 ]; then
+if [ "$#" -lt 1 ]; then
     echo "Illegal number of parameters. The firts parameter must be the choosed model to train ( mtl2, mtl3 or mtl4 )."
     exit 1
 fi
@@ -40,20 +40,22 @@ fi
 
 if [ ! -f files/mtl/gen/data/train.data ]
 then
-    wget https://www.gendata.com
-    mv train.data files/mtl/gen/data/train.data
+    wget https://www.dropbox.com/s/qkujf49pf1r24kf/train.data?dl=0
+    mv train.data?dl=0 files/mtl/gen/data/train.data
 fi
 
 if [ ! -f files/mtl/pos/data/train.data ]
 then
-    wget https://posdata.com
-    mv train.data files/mtl/pos/data/train.data
+    wget https://www.dropbox.com/s/y15iuw6ngxycd4h/train.data?dl=0
+    mv train.data?dl=0 files/mtl/pos/data/train.data
 fi
 
 if [ ! -f files/mtl/ner_bijankhan/we.vec ]
 then
-    wget https://wordemb.com/we.vec
-    mv we.vec files/mtl/ner_bijankhan/we.vec
+    wget https://dl.fbaipublicfiles.com/fasttext/vectors-crawl/cc.fa.300.vec.gz
+    tar -xzf ./cc.fa.300.vec.tar.gz
+    mv ./cc.fa.300.vec ./files/mtl/ner_bijankhan/we.vec
+    rm ./cc.fa.300.vec.tar.gz
 fi
 
 
