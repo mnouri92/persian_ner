@@ -1,8 +1,16 @@
 #!/bin/bash
 
-if [ "$#" -lt 1 ]; then
+if [ "$#" -lt 1 ]
+then
     echo "Illegal number of parameters. The firts parameter must be the choosed model to train ( mtl2, mtl3 or mtl4 )."
     exit 1
+fi
+
+if [ "$1" != "mtl2" ] && [ "$1" != "mtl3" ] && [ "$1" != "mtl4" ]
+then
+
+	echo "Please choose model type from [mtl2, mtl3 and mtl4]"
+	exit 1
 fi
 
 pip install -r requirement.txt
