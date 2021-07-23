@@ -45,7 +45,7 @@ After running the code for each of tasks , the trained model will be saved in **
 The trained model that saved on model sub-directory is in **checkpoints** format that you will need **SavedModel** format of that to deploy as web API using TensorFlow Serving module.
 The **export_saved_model.sh** file has been provided for this reason that you can use that as follow to export the SavedModel format of checkpoints saved model.
 
-``` ./export_saved_model.sh <type> <task_path>```
+``` ./export_saved_model.sh <type> <task_path> <model_version_number>```
 
 > type is one of the mtl2 , mtl3 or mtl4
 > task_path is the path of task that has been chosen as main task in training step. for example could be files/mtl/gen if gen task has been chosen as main task.

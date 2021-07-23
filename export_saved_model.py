@@ -14,7 +14,8 @@ type = sys.argv[1] #stl/mtl
 model_path = sys.argv[2]
 file_full_word_embedding =sys.argv[3]
 export_path = sys.argv[4]
-export_dir = os.path.join(export_path, '1')
+MODEL_VERSION = sys.argv[5]
+export_dir = os.path.join(export_path, MODEL_VERSION)
 
 cfg = Config("", [], model_path, file_full_word_embedding)
 
