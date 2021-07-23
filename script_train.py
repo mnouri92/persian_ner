@@ -41,7 +41,7 @@ elif type == "mtl4":
     all_files = cfg.file_conll_aux_task_train_data
     all_files.append(cfg.file_conll_main_task_train_data)
 
-answer = input("continue from previous learned models (probabely to improve them)?(yes/no)")
+answer = raw_input("continue from previous learned models (probabely to improve them)?(yes/no)")
 if answer == "no":
     logger.info("bulding vocabulray")
     [word_vocab, tag_vocab, char_vocab, max_char] = build_vocab(all_files)

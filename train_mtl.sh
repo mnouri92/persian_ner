@@ -15,24 +15,24 @@ fi
 
 pip install -r requirement.txt
 
-mkdir files
-mkdir files/mtl
-mkdir files/mtl/ner_bijankhan
-mkdir files/mtl/ner_bijankhan/data
-mkdir files/mtl/ner_bijankhan/model
-mkdir files/mtl/ner_bijankhan/saved_model
-mkdir files/mtl/ner_armanperso
-mkdir files/mtl/ner_armanperso/data
-mkdir files/mtl/ner_armanperso/model
-mkdir files/mtl/ner_armanperso/saved_model
-mkdir files/mtl/gen
-mkdir files/mtl/gen/data
-mkdir files/mtl/gen/model
-mkdir files/mtl/gen/saved_model
-mkdir files/mtl/pos
-mkdir files/mtl/pos/data
-mkdir files/mtl/pos/model
-mkdir files/mtl/pos/saved_model
+mkdir -p files
+mkdir -p files/mtl
+mkdir -p files/mtl/ner_bijankhan
+mkdir -p files/mtl/ner_bijankhan/data
+mkdir -p files/mtl/ner_bijankhan/model
+mkdir -p files/mtl/ner_bijankhan/saved_model
+mkdir -p files/mtl/ner_armanperso
+mkdir -p files/mtl/ner_armanperso/data
+mkdir -p files/mtl/ner_armanperso/model
+mkdir -p files/mtl/ner_armanperso/saved_model
+mkdir -p files/mtl/gen
+mkdir -p files/mtl/gen/data
+mkdir -p files/mtl/gen/model
+mkdir -p files/mtl/gen/saved_model
+mkdir -p files/mtl/pos
+mkdir -p files/mtl/pos/data
+mkdir -p files/mtl/pos/model
+mkdir -p files/mtl/pos/saved_model
 
 if [ ! -f files/mtl/ner_bijankhan/data/train.data ]
 then
