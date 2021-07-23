@@ -38,7 +38,10 @@ For train the model all that you have to do is just specify the chosen model to 
 > [ files/mtl/ner_bijankhan , files/mtl/ner_armanperso , files/mtl/gen , files/mtl/pos ]
 
 After that model training was ended you can evaluate the model by run the bellow code in terminal :
-``` ./evaluate_mtl.sh <model_type> <trained_model_path> <input_data_path> <output_data_path> ```
+``` ./evaluate_mtl.sh <model_type> <trained_model_path> <input_datas_DIR> <output_DIR> ```
+
+Also you can test your model by run the bellow code :
+``` python script_predict.py <model_type> <trained_model_path> <input_file_path> <output_file_path>```
 
 ## Step-4
 After running the code for each of tasks , the trained model will be saved in **./model** sub-directory related to chosen task as main.
